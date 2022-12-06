@@ -8,4 +8,8 @@ public class Fool : Piece
     {
         throw new System.NotImplementedException();
     }
+
+    public Fool(int colorMultiplier) : base(colorMultiplier)
+    {
+    }
 }

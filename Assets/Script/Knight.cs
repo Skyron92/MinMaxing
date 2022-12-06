@@ -9,4 +9,8 @@ public class Knight : Piece
     {
         throw new System.NotImplementedException();
     }
+
+    public Knight(int colorMultiplier) : base(colorMultiplier)
+    {
+    }
 }

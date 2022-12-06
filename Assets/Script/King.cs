@@ -8,4 +8,8 @@ public class King : Piece
     {
         throw new System.NotImplementedException();
     }
+
+    public King(int colorMultiplier) : base(colorMultiplier)
+    {
+    }
 }

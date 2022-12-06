@@ -8,4 +8,8 @@ public class Queen : Piece
     {
         throw new System.NotImplementedException();
     }
+
+    public Queen(int colorMultiplier) : base(colorMultiplier)
+    {
+    }
 }
