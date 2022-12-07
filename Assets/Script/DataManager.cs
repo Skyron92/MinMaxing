@@ -1,27 +1,43 @@
 using System;
-using System.Collections;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
-using Button = UnityEngine.UI.Button;
 
 public class DataManager : MonoBehaviour
 {
-    public static int[,] Plateau = new int[8,8];
-    [SerializeField] private static Piece[,] grid = new Piece[8,8];
-    [SerializeField] public GameObject CasePrefab;
+    [SerializeField] public static Piece[,] board = new Piece[8, 8];
+    [SerializeField] public GameObject RookPrefab, KnightPrefab, FoolPrefab, QueenPrefab, KingPrefab, PawnPrefab;
+    public Piece KingW, KingB, QueenW, QueenB, FoolW, FoolB, KnightW, KnightB, RookW, RookB, PawnW, PawnB; 
 
     private void Awake() {
-        GameObject instance = Instantiate(CasePrefab, transform);
-            Piece[,] board = new Piece[,] {
-                { new Rook(1), new Knight(1), new Fool(1), new King(1), new Queen(1), new Fool(1), new Knight(1), new Rook(1) },
-                { new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1)},
-                { null, null, null, null, null, null, null ,null},
-                { null, null, null, null, null, null, null ,null},
-                { null, null, null, null, null, null, null ,null},
-                { null, null, null, null, null, null, null ,null},
-                { new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1)},
-                { new Rook(-1), new Knight(-1), new Fool(-1), new Queen(-1), new King(-1), new Fool(-1), new Knight(-1), new Rook(-1)},
-            };
+        var StartBoard = new Piece[8, 8] {
+            { new Rook(1), new Knight(1), new Fool(1), new King(1), new Queen(1), new Fool(1), new Knight(1),
+                new Rook(1) },
+            { new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1) },
+            { null, null, null, null, null, null, null, null },
+            { null, null, null, null, null, null, null, null },
+            { null, null, null, null, null, null, null, null },
+            { null, null, null, null, null, null, null, null },
+            { new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1),
+                new Pawn(-1) },
+            { new Rook(-1), new Knight(-1), new Fool(-1), new Queen(-1), new King(-1), new Fool(-1), new Knight(-1),
+                new Rook(-1) }
+        };
+        foreach (var VARIABLE in StartBoard) {
+            if (VARIABLE != null) InstanciatePiece(CheckPieceClass(VARIABLE));
+        }
+    }
+    int CheckPieceClass(Piece piece) {
+        int Id = piece.TypeOfPiece;
+        return Id;
+    }
+
+    void InstanciatePiece(int id) {
+        if(id == null) return;
+        if (id == 1) Instantiate(PawnPrefab);
+        if (id == 2) Instantiate(RookPrefab);
+        if (id == 3) Instantiate(KnightPrefab);
+        if (id == 4) Instantiate(FoolPrefab);
+        if (id == 5) Instantiate(QueenPrefab);
+        if (id == 6) Instantiate(KingPrefab);
     }
 }

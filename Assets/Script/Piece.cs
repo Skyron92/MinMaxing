@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
-using Button = UnityEngine.UI.Button;
+using Image = UnityEngine.UI.Image;
 
-public abstract class Piece : MonoBehaviour
+public abstract class Piece : ScriptableObject
 {
     public int ColorMultiplier, TypeOfPiece, IdPiece;
-    public Button button;
+    public Sprite sprite;
     public List<Vector2Int> AvailableTarget = new List<Vector2Int>();
 
     protected Piece(int colorMultiplier) {

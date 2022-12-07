@@ -1,21 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
-using Button = UnityEngine.UI.Button;
+using Image = UnityEngine.UI.Image;
 
 public class Pawn : Piece
 {
-    public void Awake()
-    {
-        button = GetComponent<Button>();
+    public void Awake() {
         TypeOfPiece = 1;
         IdPiece = TypeOfPiece * ColorMultiplier;
     }
 
-    public override List<Vector2Int> AvailableMove()
-    {
+    public override List<Vector2Int> AvailableMove() {
         List<Vector2Int> list = new List<Vector2Int>();
-       
+        Vector2Int up = new Vector2Int(1 * ColorMultiplier,0);
+        list.Add(up);
         return list;
     }
 
