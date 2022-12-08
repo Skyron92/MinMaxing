@@ -6,8 +6,10 @@ using UnityEngine.UI;
 public abstract class Piece : ScriptableObject {
     public int ColorMultiplier, TypeOfPiece, IdPiece, X, Y;
     public Image sprite;
-    public List<Vector2Int> AvailableTarget = new();
+    public List<Vector2Int> AvailableTarget = new List<Vector2Int>();
+    public Vector2Int position = new Vector2Int();
     private BoxCollider collider;
+    private Rigidbody rb;
 
     private void Awake() {
         collider = this.AddComponent<BoxCollider>();

@@ -15,5 +15,8 @@ MonoBehaviour:
   ColorMultiplier: -1
   TypeOfPiece: 4
   IdPiece: -4
-  sprite: {fileID: 3196026487132162080, guid: 5e16e83023313a3469b296148f80ffdc, type: 3}
+  X: 7
+  Y: 5
+  sprite: {fileID: 3196026487132162080, guid: afd94d6dbce1e8543b8189694ad2675e, type: 3}
   AvailableTarget: []
+  position: {x: 0, y: 0}

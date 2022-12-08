@@ -11,6 +11,7 @@ public class Rook : Piece {
 
     public override List<Vector2Int> AvailableMove() {
         var list = new List<Vector2Int>();
+        
         return list;
     }
 }
