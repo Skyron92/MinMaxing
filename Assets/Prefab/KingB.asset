@@ -7,13 +7,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd0c2fcf21af44d69979e7c52b2c7d60, type: 3}
-  m_Name: KnightB
+  m_Script: {fileID: 11500000, guid: 9ab3ceffaf014784853073d163dff472, type: 3}
+  m_Name: KingB
   m_EditorClassIdentifier: 
   ColorMultiplier: -1
-  TypeOfPiece: 3
-  IdPiece: 0
-  sprite: {fileID: 21300000, guid: 2702c1b989f76cf459a66516c0a4a06e, type: 3}
+  TypeOfPiece: 6
+  IdPiece: -6
+  sprite: {fileID: 340327724105385178, guid: e28559d9a0c779145abe11b8397010f5, type: 3}
   AvailableTarget: []

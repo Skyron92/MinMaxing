@@ -1,22 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
-using Image = UnityEngine.UI.Image;
 
 [CreateAssetMenu(menuName = "Piece/King")]
-public class King : Piece
-{
-    public override List<Vector2Int> AvailableMove()
-    {
-        throw new System.NotImplementedException();
-    }
-    
+public class King : Piece {
     public void Awake() {
         TypeOfPiece = 6;
         IdPiece = TypeOfPiece * ColorMultiplier;
+        if (ColorMultiplier < 0) sprite.color = new Color(100, 100, 100);
     }
 
-    public King(int colorMultiplier) : base(colorMultiplier)
-    {
+    public override List<Vector2Int> AvailableMove() {
+        throw new NotImplementedException();
     }
 }

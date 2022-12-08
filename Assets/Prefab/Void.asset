@@ -9,11 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3aefd52a9b46417a947e4f63c6ae5fc2, type: 3}
-  m_Name: QueenW
+  m_Script: {fileID: 11500000, guid: 02b70f4dceea4ccc9858f7a11507e347, type: 3}
+  m_Name: Void
   m_EditorClassIdentifier: 
-  ColorMultiplier: 1
-  TypeOfPiece: 5
+  ColorMultiplier: 0
+  TypeOfPiece: 0
   IdPiece: 0
-  sprite: {fileID: 21300000, guid: cd0ffd557cbeb794fa80a363525c5a2b, type: 3}
+  X: 0
+  Y: 0
+  sprite: {fileID: 6496216042271456722, guid: 577f46b1232c1bf47bd1477b16bbc754, type: 3}
   AvailableTarget: []

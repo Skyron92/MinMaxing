@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-using Image = UnityEngine.UI.Image;
+using UnityEngine.UI;
 
+public abstract class Piece : ScriptableObject {
+    public int ColorMultiplier, TypeOfPiece, IdPiece, X, Y;
+    public Image sprite;
+    public List<Vector2Int> AvailableTarget = new();
+    private BoxCollider collider;
 
-public abstract class Piece : ScriptableObject
-{
-    public int ColorMultiplier, TypeOfPiece, IdPiece;
-    public Sprite sprite;
-    public List<Vector2Int> AvailableTarget = new List<Vector2Int>();
-
-    protected Piece(int colorMultiplier) {
-        ColorMultiplier = colorMultiplier;
+    private void Awake() {
+        collider = this.AddComponent<BoxCollider>();
+        collider.size = new Vector3(50, 100, 10);
     }
 
     public abstract List<Vector2Int> AvailableMove();

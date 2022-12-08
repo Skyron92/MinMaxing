@@ -7,13 +7,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a21552c45bd44d4c870d430d3017a006, type: 3}
   m_Name: PawnB
   m_EditorClassIdentifier: 
   ColorMultiplier: -1
   TypeOfPiece: 1
-  IdPiece: 0
-  sprite: {fileID: 21300000, guid: fc84e07c795030f4b806ec2254cf7544, type: 3}
+  IdPiece: -1
+  sprite: {fileID: 2763920781323270943, guid: 71d208f65f449e241bae646a6579ec18, type: 3}
   AvailableTarget: []

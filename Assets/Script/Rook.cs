@@ -3,15 +3,14 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "Piece/Rook")]
 public class Rook : Piece {
-    public override List<Vector2Int> AvailableMove() {
-        List<Vector2Int> list = new List<Vector2Int>();
-        return list;
-    }
-    
     public void Awake() {
         TypeOfPiece = 2;
         IdPiece = TypeOfPiece * ColorMultiplier;
+        if (ColorMultiplier < 0) sprite.color = new Color(100, 100, 100);
     }
 
-    public Rook(int colorMultiplier) : base(colorMultiplier) {}
+    public override List<Vector2Int> AvailableMove() {
+        var list = new List<Vector2Int>();
+        return list;
+    }
 }
