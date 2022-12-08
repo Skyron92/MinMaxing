@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 4774531145664616826}
   - component: {fileID: 4774531145664616708}
   - component: {fileID: 4774531145664616827}
-  - component: {fileID: 3792527284497736712}
   m_Layer: 5
-  m_Name: Knight
+  m_Name: KnightW
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,20 +76,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3792527284497736712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4774531145664616825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd0c2fcf21af44d69979e7c52b2c7d60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ColorMultiplier: 0
-  TypeOfPiece: 0
-  IdPiece: 0
-  sprite: {fileID: 0}
-  AvailableTarget: []

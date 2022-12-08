@@ -2,6 +2,7 @@
 using UnityEngine;
 using Image = UnityEngine.UI.Image;
 
+
 public abstract class Piece : ScriptableObject
 {
     public int ColorMultiplier, TypeOfPiece, IdPiece;

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
 
+[CreateAssetMenu(menuName = "Piece/King")]
 public class King : Piece
 {
     public override List<Vector2Int> AvailableMove()

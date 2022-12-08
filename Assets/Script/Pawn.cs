@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Image = UnityEngine.UI.Image;
 
+[CreateAssetMenu(menuName = "Piece/Pawn")]
 public class Pawn : Piece
 {
     public void Awake() {

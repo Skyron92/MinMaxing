@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
-using Image = UnityEngine.UI.Image;
 
+[CreateAssetMenu(menuName = "Piece/Rook")]
 public class Rook : Piece {
     public override List<Vector2Int> AvailableMove() {
         List<Vector2Int> list = new List<Vector2Int>();

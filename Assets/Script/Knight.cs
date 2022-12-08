@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
 
+[CreateAssetMenu(menuName = "Piece/Knight")]
 public class Knight : Piece
 {
     public override List<Vector2Int> AvailableMove()
