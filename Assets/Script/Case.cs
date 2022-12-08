@@ -1,23 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class Case : MonoBehaviour {
+[CreateAssetMenu(menuName = "Case")]
+public class Case : ScriptableObject {
     public bool isTaken, byWhite;
+    public Image sprite;
+    public int X, Y;
 
-    private void OnTriggerEnter(Collider other) {
-        Debug.Log("Taken !");
-        isTaken = true;
-        var piece = other.GetComponent<Image>();
-        if (piece.color == Color.white) byWhite = true;
-        else
-            byWhite = false;
-    }
-
-    private void OnTriggerExit(Collider other) {
-        isTaken = false;
-    }
-
-    private void OnTriggerStay(Collider other) {
-        isTaken = true;
+    void GetPiece() {
+        if (DataManager.board[X, Y] != null) isTaken = true;
+        else isTaken = false;
     }
 }

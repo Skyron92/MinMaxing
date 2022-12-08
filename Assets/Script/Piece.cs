@@ -10,6 +10,7 @@ public abstract class Piece : ScriptableObject {
     public Vector2Int position = new Vector2Int();
     private BoxCollider collider;
     private Rigidbody rb;
+    public bool CanMove;
 
     private void Awake() {
         collider = this.AddComponent<BoxCollider>();
@@ -17,4 +18,11 @@ public abstract class Piece : ScriptableObject {
     }
 
     public abstract List<Vector2Int> AvailableMove();
+
+    public bool GetCase(int x, int y) {
+        bool hasPiece = false;
+        Case current = DataManager.Echiquier[x, y];
+        hasPiece = current.isTaken;
+        return hasPiece;
+    }
 }

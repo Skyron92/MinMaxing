@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class DataManager : MonoBehaviour {
     [SerializeField] public static Piece[,] board = new Piece[8, 8];
+    public static  Case[,] Echiquier = new Case[8, 8];
     public Piece KingW, KingB, QueenW, QueenB, FoolW, FoolB, KnightW, KnightB, RookW, RookB, PawnW, PawnB, Void;
     public Transform Board;
-    public GameObject White, Black;
+    public Case White, Black;
 
     private void Awake() {
         var StartBoard = new Piece[8, 8] {
@@ -18,7 +19,7 @@ public class DataManager : MonoBehaviour {
             { RookB, KnightB, FoolB, QueenB, KingB, FoolB, KnightB, RookB }
         };
         board = StartBoard;
-        var Echiquier = new GameObject[8, 8] {
+        Case[,] Echiquier = {
             { White, Black, White, Black, White, Black, White, Black },
             { Black, White, Black, White, Black, White, Black, White },
             { White, Black, White, Black, White, Black, White, Black },
@@ -28,14 +29,21 @@ public class DataManager : MonoBehaviour {
             { White, Black, White, Black, White, Black, White, Black },
             { Black, White, Black, White, Black, White, Black, White },
         };
-        foreach (var VARIABLE in Echiquier) {
-            if (VARIABLE == White) Instantiate(White, transform);
-            else Instantiate(Black, transform);
+        foreach (var cases in Echiquier) {
+            if (cases == White) Instantiate(White.sprite, transform);
+            else Instantiate(Black.sprite, transform);
+            for (int x = 0; x < 8; x++){
+                for (int y = 0; y< 8; y++) {
+                    Debug.Log(x + " " + y);
+                    Echiquier[x, y].X = x;
+                    Echiquier[x, y].Y = y;
+                }
+            }
         }
-        foreach (var piece in StartBoard)
+        foreach (Piece piece in StartBoard)
             Instantiate(piece.sprite, Board);
-                for (int x = StartBoard.GetLowerBound(0); x <= StartBoard.GetUpperBound(0); x++){
-                    for (int y = StartBoard.GetLowerBound(1); y<= StartBoard.GetUpperBound(1); y++) {
+                for (int x = 0; x < 8; x++){
+                    for (int y = 0; y< 8; y++) {
                         Debug.Log(x + " " + y);
                         StartBoard[x, y].X = x;
                         StartBoard[x, y].Y = y;
