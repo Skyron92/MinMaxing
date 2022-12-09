@@ -506,8 +506,8 @@ MonoBehaviour:
   PawnB: {fileID: 11400000, guid: 72218a226cc2f3545a669cc41dfe112b, type: 2}
   Void: {fileID: 11400000, guid: a3f9d04454e691b4589d2a67bc018f25, type: 2}
   Board: {fileID: 488957489}
-  White: {fileID: 4375836591404982479, guid: 7c7778d56bef82340846fcf89298ed51, type: 3}
-  Black: {fileID: 7540998849538611533, guid: f6c5a12c75d57d14a939febb3724747c, type: 3}
+  White: {fileID: 11400000, guid: 5e9ae8ac3ba7e244685b9428fef61d1e, type: 2}
+  Black: {fileID: 11400000, guid: 2c3de12eca5ed754b91aa77a38d7296d, type: 2}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

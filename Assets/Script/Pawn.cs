@@ -14,8 +14,8 @@ public class Pawn : Piece {
     public override List<Vector2Int> AvailableMove() {
         var list = new List<Vector2Int>();
         CanMove = !GetCase(X + 1 * ColorMultiplier, 0);
-        CanKillRight = GetCase(X + 1 * ColorMultiplier, Y + 1);
-        CanKillLeft = GetCase(X + 1 * ColorMultiplier, Y - 1);
+        CanKillRight = !GetFactionCase(X + ColorMultiplier, Y + ColorMultiplier);
+        CanKillLeft = !GetFactionCase(X + ColorMultiplier, Y - ColorMultiplier);
         bool hasPiece;
 
         if (CanMove) {
@@ -34,11 +34,11 @@ public class Pawn : Piece {
         }
 
         if (CanKillRight) {
-            Vector2Int KillRight = new Vector2Int(X + ColorMultiplier, Y + 1);
+            Vector2Int KillRight = new Vector2Int(X + ColorMultiplier, Y + ColorMultiplier);
             list.Add(KillRight);
         }
         if (CanKillLeft) {
-            Vector2Int KillLeft = new Vector2Int(X + ColorMultiplier, Y - 1);
+            Vector2Int KillLeft = new Vector2Int(X + ColorMultiplier, Y - ColorMultiplier);
             list.Add(KillLeft);
         }
 

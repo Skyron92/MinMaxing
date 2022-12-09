@@ -25,4 +25,11 @@ public abstract class Piece : ScriptableObject {
         hasPiece = current.isTaken;
         return hasPiece;
     }
+    
+    public bool GetFactionCase(int x, int y) {
+        bool isSameColor = false;
+        Case current = DataManager.Echiquier[x, y];
+        if (current.IdPiece == ColorMultiplier) isSameColor = true;
+        return isSameColor;
+    }
 }

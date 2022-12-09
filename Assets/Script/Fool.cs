@@ -14,38 +14,76 @@ public class Fool : Piece {
         List<Vector2Int> list = new List<Vector2Int>();
         bool hasPiece;
         
-        for (int i = 0; X + i < 8; i++) {
+        for (int i = 1; X + i < 8; i++) {
             hasPiece = DataManager.Echiquier[X + i * ColorMultiplier, Y + i * ColorMultiplier].isTaken;
             if (!hasPiece) {
                 Vector2Int move = new Vector2Int(X + i * ColorMultiplier, Y + i * ColorMultiplier);
                 list.Add(move);
             }
-            else break;
+            else { //sinon on vérifie la couleur de la pièce
+                if (GetFactionCase(X + i * ColorMultiplier, Y + i * ColorMultiplier)) {
+                    break;
+                }
+                else { //si c'est une pièce ennemie, on arrête le mouvement sur sa position 
+                    Vector2Int move = new Vector2Int(X + i * ColorMultiplier, Y + i * ColorMultiplier);
+                    list.Add(move);
+                    break;
+                }
+            }
         }
-        for (int i = 8; X - i >= 0; i--) {
+        for (int i = 1; X - i >= 0; i++) {
             hasPiece = DataManager.Echiquier[X - i * ColorMultiplier, Y - i * ColorMultiplier].isTaken;
             if (!hasPiece) {
                 Vector2Int move = new Vector2Int(X - i * ColorMultiplier, Y - i * ColorMultiplier);
                 list.Add(move);
             }
-            else break;
+            else { //sinon on vérifie la couleur de la pièce
+                if (GetFactionCase(X - i * ColorMultiplier, Y - i * ColorMultiplier)) {
+                    break;
+                }
+                else { //si c'est une pièce ennemie, on arrête le mouvement sur sa position 
+                    Vector2Int move = new Vector2Int(X - i * ColorMultiplier, Y - i * ColorMultiplier);
+                    list.Add(move);
+                    break;
+                }
+            }
         }
 
-        for (int i = 0; X + i < 8; i++) {
-            for (int j = 8; Y - j >= 0; j--) {
+        for (int i = 1; X + i < 8; i++) {
+            for (int j = 1; Y - j >= 0; j++) {
                 hasPiece = DataManager.Echiquier[X + i * ColorMultiplier, Y - j * ColorMultiplier].isTaken;
                 if (!hasPiece) {
                     Vector2Int move = new Vector2Int(X + i * ColorMultiplier, Y - j * ColorMultiplier);
                     list.Add(move);
                 }
+                else { //sinon on vérifie la couleur de la pièce
+                    if (GetFactionCase(X + i * ColorMultiplier, Y - j * ColorMultiplier)) {
+                        break;
+                    }
+                    else { //si c'est une pièce ennemie, on arrête le mouvement sur sa position 
+                        Vector2Int move = new Vector2Int(X + i * ColorMultiplier, Y - j * ColorMultiplier);
+                        list.Add(move);
+                        break;
+                    }
+                }
             }
         }
-        for (int i = 8; X + i >= 0; i--) {
-            for (int j = 0; Y - j < 8; j++) {
+        for (int i = 1; X - i >= 0; i++) {
+            for (int j = 1; Y + j < 8; j++) {
                 hasPiece = DataManager.Echiquier[X - i * ColorMultiplier, Y + j * ColorMultiplier].isTaken;
                 if (!hasPiece) {
                     Vector2Int move = new Vector2Int(X - i * ColorMultiplier, Y + j * ColorMultiplier);
                     list.Add(move);
+                }
+                else { //sinon on vérifie la couleur de la pièce
+                    if (GetFactionCase(X - i * ColorMultiplier, Y + j * ColorMultiplier)) {
+                        break;
+                    }
+                    else { //si c'est une pièce ennemie, on arrête le mouvement sur sa position 
+                        Vector2Int move = new Vector2Int(X - i * ColorMultiplier, Y + j * ColorMultiplier);
+                        list.Add(move);
+                        break;
+                    }
                 }
             }
         }
