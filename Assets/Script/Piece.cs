@@ -8,14 +8,7 @@ public abstract class Piece : ScriptableObject {
     public Image sprite;
     public List<Vector2Int> AvailableTarget = new List<Vector2Int>();
     public Vector2Int position = new Vector2Int();
-    private BoxCollider collider;
-    private Rigidbody rb;
     public bool CanMove;
-
-    private void Awake() {
-        collider = this.AddComponent<BoxCollider>();
-        collider.size = new Vector3(50, 100, 10);
-    }
 
     public abstract List<Vector2Int> AvailableMove();
 

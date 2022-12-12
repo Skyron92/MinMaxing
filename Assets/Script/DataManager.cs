@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DataManager : MonoBehaviour {
     [SerializeField] public static Piece[,] board = new Piece[8, 8];
@@ -18,7 +20,7 @@ public class DataManager : MonoBehaviour {
             { PawnB, PawnB, PawnB, PawnB, PawnB, PawnB, PawnB, PawnB },
             { RookB, KnightB, FoolB, QueenB, KingB, FoolB, KnightB, RookB }
         };
-        board = StartBoard;
+        
         Case[,] Echiquier = {
             { White, Black, White, Black, White, Black, White, Black },
             { Black, White, Black, White, Black, White, Black, White },
@@ -40,14 +42,25 @@ public class DataManager : MonoBehaviour {
                 }
             }
         }
-        foreach (Piece piece in StartBoard)
-            Instantiate(piece.sprite, Board);
-                for (int x = 0; x < 8; x++){
-                    for (int y = 0; y< 8; y++) {
-                        Debug.Log(x + " " + y);
-                        StartBoard[x, y].X = x;
-                        StartBoard[x, y].Y = y;
-                    }
+
+        foreach (Piece piece in StartBoard) {
+            Image sprite = Instantiate(piece.sprite, Board);
+            if (piece.ColorMultiplier < 0) sprite.color = new Color(100, 100, 100);
+            for (int x = 0; x < 8; x++) {
+                for (int y = 0; y < 8; y++) {
+                    Debug.Log(x + " " + y);
+                    StartBoard[x, y].X = x;
+                    StartBoard[x, y].Y = y;
                 }
+            }
+        }
+        
+        board = StartBoard;
+    }
+
+    private void Update() {
+        foreach (var piece in board) {
+            if(Input.GetButtonDown("Fire1")) Debug.Log(piece.AvailableMove());
+        }
     }
 }
