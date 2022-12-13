@@ -64,8 +64,8 @@ namespace Script.Pieces {
             get {
                 List<Vector2Int> vector2Ints = new List<Vector2Int>();
                 // Forward move
-                for (int i = Y - ColorMultiplier; i >= 0; i--) {
-                    Vector2Int vector2Int = new Vector2Int(X, Y - i);
+                for (int i = Y - 1; i >= 0; i--) {
+                    Vector2Int vector2Int = new Vector2Int(X, i);
                     Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
                     if (piece != null) {
                         if(piece.ColorMultiplier == ColorMultiplier) break;
@@ -73,8 +73,8 @@ namespace Script.Pieces {
                     }
                 }
                 // Backward move
-                for (int i = Y + ColorMultiplier; i <= 7; i++) {
-                    Vector2Int vector2Int = new Vector2Int(X, Y + i);
+                for (int i = Y + 1; i <= 7; i++) {
+                    Vector2Int vector2Int = new Vector2Int(X, i);
                     Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
                     if (piece != null) {
                         if(piece.ColorMultiplier == ColorMultiplier) break;
@@ -91,7 +91,7 @@ namespace Script.Pieces {
                 // BottomRight move
                 for (int i = X + 1; i <= 7; i++) {
                     for (int j = Y + 1; j <= 7; j++) {
-                        Vector2Int vector2Int = new Vector2Int(X + i, Y + j);
+                        Vector2Int vector2Int = new Vector2Int(i, j);
                         Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
                         if (piece != null) {
                             if(piece.ColorMultiplier == ColorMultiplier) break;
@@ -102,7 +102,7 @@ namespace Script.Pieces {
                 // TopLeft move
                 for (int i = X - 1; i >= 0; i--) {
                     for (int j = Y - 1; j >= 0; j--) {
-                        Vector2Int vector2Int = new Vector2Int(X - i, Y - j);
+                        Vector2Int vector2Int = new Vector2Int(i, j);
                         Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
                         if (piece != null) {
                             if(piece.ColorMultiplier == ColorMultiplier) break;
@@ -113,7 +113,7 @@ namespace Script.Pieces {
                 // BottomLeft move
                 for (int i = X + 1; i <= 7; i++) {
                     for (int j = Y - 1; j >= 0; j--) {
-                        Vector2Int vector2Int = new Vector2Int(X + i, Y - j);
+                        Vector2Int vector2Int = new Vector2Int(i, j);
                         Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
                         if (piece != null) {
                             if(piece.ColorMultiplier == ColorMultiplier) break;
@@ -124,7 +124,7 @@ namespace Script.Pieces {
                 // TopRight move
                 for (int i = X - 1; i >= 0; i--) {
                     for (int j = Y + 1; j <= 7; j++) {
-                        Vector2Int vector2Int = new Vector2Int(X - i, Y + j);
+                        Vector2Int vector2Int = new Vector2Int(i, j);
                         Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
                         if (piece != null) {
                             if(piece.ColorMultiplier == ColorMultiplier) break;

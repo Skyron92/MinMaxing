@@ -75,7 +75,6 @@ namespace Script.Managers {
                     instantiate.GetComponent<Image>().sprite = GetSprite(piece);
                 }
             }
-            
         }
 
         private Sprite GetSprite(Piece piece) {
