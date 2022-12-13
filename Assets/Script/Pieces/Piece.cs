@@ -146,10 +146,5 @@ namespace Script.Pieces {
         private void OnDestroy() {
             score -= IdPiece;
         }
-        
-
-        public bool CheckBoardRange(int x, int y) {
-            return x <= 7 && x >= 0 && y <= 7 && y >= 0;
-        }
     }
 }

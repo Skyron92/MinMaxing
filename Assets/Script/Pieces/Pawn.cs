@@ -16,17 +16,12 @@ namespace Script.Pieces {
 
         public override List<Vector2Int> AvailableMove() {
             var list = new List<Vector2Int>();
-
-            if (!CheckBoardRange(X + ColorMultiplier, 0)) {
-                if (CanMove) {
-                    Vector2Int move = new Vector2Int(X + ColorMultiplier, Y);
-                    list.Add(move);
-                }
-            }
-        
-
+            
             return list;
         }
-    
+
+        public List<Vector2Int> Vector2Ints = new List<Vector2Int>();
+        
+
     }
 }

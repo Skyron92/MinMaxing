@@ -16,6 +16,7 @@ namespace Script.Pieces {
             List<Vector2Int> list = new List<Vector2Int>();
             list.AddRange(XMoves);
             list.AddRange(YMoves);
+            list.AddRange(DiagonalMove);
             return list;
         }
     
