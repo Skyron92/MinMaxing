@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Piece/King")]
 public class King : Piece {
     public void Awake() {
-        TypeOfPiece = 6;
+        TypeOfPiece = 150;
         IdPiece = TypeOfPiece * ColorMultiplier;
         if (ColorMultiplier < 0) sprite.color = new Color(100, 100, 100);
     }

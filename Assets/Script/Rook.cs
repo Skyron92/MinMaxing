@@ -5,19 +5,17 @@ using UnityEngine;
 public class Rook : Piece {
 
     public void Awake() {
-        TypeOfPiece = 2;
+        TypeOfPiece = 5;
         IdPiece = TypeOfPiece * ColorMultiplier;
         if (ColorMultiplier < 0) sprite.color = new Color(100, 100, 100);
     }
 
     public override List<Vector2Int> AvailableMove() {
         var list = new List<Vector2Int>();
-        bool hasPiece;
         
         //Déplacement vertical vers l'avant
         for (int i = 1; X + i < 8; i++) {
-            hasPiece = DataManager.Echiquier[X + i * ColorMultiplier, Y].isTaken;
-            if (!hasPiece) { //si la case est libre
+            if (!GetCase(X + i * ColorMultiplier, Y)) { //si la case est libre
                 Vector2Int move = new Vector2Int(X + i * ColorMultiplier, Y);
                 list.Add(move);
             }
@@ -34,8 +32,8 @@ public class Rook : Piece {
         }
 
         for (int i = 1; X - i >= 0; i++) {
-            hasPiece = DataManager.Echiquier[X - i * ColorMultiplier, Y].isTaken;
-            if (!hasPiece) {
+            if (!GetCase(X - i * ColorMultiplier, Y)
+               ) {
                 Vector2Int move = new Vector2Int(X - i * ColorMultiplier, Y);
                 list.Add(move);
             }
@@ -53,8 +51,7 @@ public class Rook : Piece {
 
         int j;
         for (j = 1; Y + j < 8; j++) {
-            hasPiece = DataManager.Echiquier[X, Y + j * ColorMultiplier].isTaken;
-            if (!hasPiece) {
+            if (!GetCase(X, Y + j * ColorMultiplier)) {
                 Vector2Int move = new Vector2Int(X, Y + j * ColorMultiplier);
                 list.Add(move);
             }
@@ -70,8 +67,7 @@ public class Rook : Piece {
             }
 
             for (j = 1; Y - j >= 0; j++) {
-                hasPiece = DataManager.Echiquier[X, Y - j * ColorMultiplier].isTaken;
-                if (!hasPiece) {
+                if (!GetCase(X, Y - j * ColorMultiplier)) {
                     Vector2Int move = new Vector2Int(X, Y - j * ColorMultiplier);
                     list.Add(move);
                 }

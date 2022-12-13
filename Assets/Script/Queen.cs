@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Piece/Queen")]
 public class Queen : Piece {
     public void Awake() {
-        TypeOfPiece = 5;
+        TypeOfPiece = 10;
         IdPiece = TypeOfPiece * ColorMultiplier;
         if (ColorMultiplier < 0) sprite.color = new Color(100, 100, 100);
     }
 
     public override List<Vector2Int> AvailableMove() {
         List<Vector2Int> list = new List<Vector2Int>();
-        bool hasPiece;
         //Déplacement vertical vers l'avant
         for (int i = 1; X + i < 8; i++) {
-            hasPiece = DataManager.Echiquier[X + i * ColorMultiplier, Y].isTaken;
-            if (!hasPiece) {
+            if (!GetCase(X + i * ColorMultiplier, Y)) {
                 //si la case est libre
                 Vector2Int move = new Vector2Int(X + i * ColorMultiplier, Y);
                 list.Add(move);
@@ -36,8 +33,8 @@ public class Queen : Piece {
         }
 
         for (int i = 1; X - i >= 0; i++) {
-            hasPiece = DataManager.Echiquier[X - i * ColorMultiplier, Y].isTaken;
-            if (!hasPiece) {
+            if (!GetCase(X - i * ColorMultiplier, Y)
+               ) {
                 Vector2Int move = new Vector2Int(X - i * ColorMultiplier, Y);
                 list.Add(move);
             }
@@ -57,8 +54,7 @@ public class Queen : Piece {
 
         int j;
         for (j = 1; Y + j < 8; j++) {
-            hasPiece = DataManager.Echiquier[X, Y + j * ColorMultiplier].isTaken;
-            if (!hasPiece) {
+            if (!GetCase(X, Y + j * ColorMultiplier)) {
                 Vector2Int move = new Vector2Int(X, Y + j * ColorMultiplier);
                 list.Add(move);
             }
@@ -76,8 +72,7 @@ public class Queen : Piece {
             }
 
             for (j = 1; Y - j >= 0; j++) {
-                hasPiece = DataManager.Echiquier[X, Y - j * ColorMultiplier].isTaken;
-                if (!hasPiece) {
+                if (!GetCase(X, Y - j * ColorMultiplier)) {
                     Vector2Int move = new Vector2Int(X, Y - j * ColorMultiplier);
                     list.Add(move);
                 }
@@ -96,8 +91,7 @@ public class Queen : Piece {
             }
 
             for (int i = 1; X + i < 8; i++) {
-                hasPiece = DataManager.Echiquier[X + i * ColorMultiplier, Y + i * ColorMultiplier].isTaken;
-                if (!hasPiece) {
+                if (!GetCase(X + i * ColorMultiplier, Y + i * ColorMultiplier)) {
                     Vector2Int move = new Vector2Int(X + i * ColorMultiplier, Y + i * ColorMultiplier);
                     list.Add(move);
                 }
@@ -116,8 +110,7 @@ public class Queen : Piece {
             }
 
             for (int i = 1; X - i >= 0; i++) {
-                hasPiece = DataManager.Echiquier[X - i * ColorMultiplier, Y - i * ColorMultiplier].isTaken;
-                if (!hasPiece) {
+                if (!GetCase(X - i * ColorMultiplier, Y - i * ColorMultiplier)) {
                     Vector2Int move = new Vector2Int(X - i * ColorMultiplier, Y - i * ColorMultiplier);
                     list.Add(move);
                 }
@@ -137,8 +130,7 @@ public class Queen : Piece {
 
             for (int i = 1; X + i < 8; i++) {
                 for (j = 1; Y - j >= 0; j++) {
-                    hasPiece = DataManager.Echiquier[X + i * ColorMultiplier, Y - j * ColorMultiplier].isTaken;
-                    if (!hasPiece) {
+                    if (!GetCase(X + i * ColorMultiplier, Y - j * ColorMultiplier)) {
                         Vector2Int move = new Vector2Int(X + i * ColorMultiplier, Y - j * ColorMultiplier);
                         list.Add(move);
                     }
@@ -159,8 +151,7 @@ public class Queen : Piece {
 
             for (int i = 1; X - i >= 0; i++) {
                 for (j = 1; Y + j < 8; j++) {
-                    hasPiece = DataManager.Echiquier[X - i * ColorMultiplier, Y + j * ColorMultiplier].isTaken;
-                    if (!hasPiece) {
+                    if (!GetCase(X - i * ColorMultiplier, Y + j * ColorMultiplier)) {
                         Vector2Int move = new Vector2Int(X - i * ColorMultiplier, Y + j * ColorMultiplier);
                         list.Add(move);
                     }
@@ -178,7 +169,7 @@ public class Queen : Piece {
                     }
                 }
             }
-
-        }return list;
+        }
+        return list;
     }
 }

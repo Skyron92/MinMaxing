@@ -7,7 +7,7 @@ public class Void : Piece {
         throw new System.NotImplementedException();
     }
 
-    public void Awake() {
+    public void OnEnable() {
         TypeOfPiece = 0;
         IdPiece = 0;
         ColorMultiplier = 0;

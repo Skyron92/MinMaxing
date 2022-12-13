@@ -16,16 +16,13 @@ public class Pawn : Piece {
         CanMove = !GetCase(X + 1 * ColorMultiplier, 0);
         CanKillRight = !GetFactionCase(X + ColorMultiplier, Y + ColorMultiplier);
         CanKillLeft = !GetFactionCase(X + ColorMultiplier, Y - ColorMultiplier);
-        bool hasPiece;
-
         if (CanMove) {
             Vector2Int move = new Vector2Int(X + ColorMultiplier, Y);
             list.Add(move);
         }
         if (X == 6 && ColorMultiplier < 0 || X == 1 && ColorMultiplier > 0) {
             for (int i = 1; i < 2; i++) {
-                hasPiece = DataManager.Echiquier[X + i * ColorMultiplier, Y].isTaken;
-                if (!hasPiece) {
+                if (!GetCase(X + i * ColorMultiplier, Y)) {
                     Vector2Int move = new Vector2Int(X + i * ColorMultiplier, Y);
                     list.Add(move);
                 }

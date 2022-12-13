@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451128b0ccf04a8390aec6ab3483db60, type: 3}
   m_Name: CaseB
   m_EditorClassIdentifier: 
-  isTaken: 0
-  byWhite: 0
+  isTaken: 1
   sprite: {fileID: 7540998849538611531, guid: f6c5a12c75d57d14a939febb3724747c, type: 3}
+  X: 7
+  Y: 6
+  IdPiece: -1
