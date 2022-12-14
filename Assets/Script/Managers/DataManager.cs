@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Script.Managers {
-    public class DataManager : MonoBehaviour {
+    public class DataManager : MonoBehaviour
+    {
+        private Canvas fdes;
 
         public bool UseTestingBoard;
         public int Score;
@@ -22,6 +24,7 @@ namespace Script.Managers {
             Instance = this;
             board = UseTestingBoard ? GenerateTestingBoard() : GenerateBoard();
             DisplayBoard();
+            
         }
 
         private void Update() {
@@ -140,14 +143,6 @@ namespace Script.Managers {
             }
 
             throw new Exception("Cannot find any sprite for " + type);
-        }
-
-        static int Evaluation(Piece[,] currentBoard) {
-            int value = 0;
-            foreach (Piece piece in currentBoard) {
-                value += piece.IdPiece;
-            }
-            return value;
         }
     }
 }
