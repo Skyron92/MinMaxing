@@ -7,6 +7,7 @@ namespace Script.Managers {
     public class DataManager : MonoBehaviour {
 
         public bool UseTestingBoard;
+        public int Score;
         public Transform BoardTransform;
         public Transform PiecesTransform;
         public GameObject WhiteSquarePrefab, BlackSquarePrefab, PiecePrefab;
@@ -36,27 +37,36 @@ namespace Script.Managers {
 
         private Piece[,] GenerateBoard() {
             return new Piece[8, 8] {
-                { new Rook(-1), new Knight(-1), new Fool(-1), new King(-1), new Queen(-1), new Fool(-1),  new Knight(-1), new Rook(-1) },
-                { new Pawn(-1), new Pawn(-1),new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1) },
+                {
+                    new Rook(-1), new Knight(-1), new Fool(-1), new King(-1), new Queen(-1), new Fool(-1),
+                    new Knight(-1), new Rook(-1)
+                }, {
+                    new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1),
+                    new Pawn(-1)
+                },
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1) },
-                { new Rook(1), new Knight(1), new Fool(1), new Queen(1), new King(1), new Fool(1), new Knight(1), new Rook(1) }
+                { null, null, null, null, null, null, null, null }, {
+                    new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1),
+                    new Pawn(1)
+                }, {
+                    new Rook(1), new Knight(1), new Fool(1), new Queen(1), new King(1), new Fool(1), new Knight(1),
+                    new Rook(1)
+                }
             };
         }
-        
+
         private Piece[,] GenerateTestingBoard() {
             return new Piece[8, 8] {
-                { new Rook(-1), new Knight(-1), new Fool(-1), new King(-1), new Queen(-1), new Fool(-1),  new Knight(-1), new Rook(-1) },
-                { new Pawn(-1), new Pawn(-1),new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1), new Pawn(-1) },
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
+                { null, null, null, null, new Fool(1), null, null, null },
+                { null, null, null, null, null, new Pawn(-1), null, null },
                 { null, null, null, null, null, null, null, null },
-                { new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1), new Pawn(1) },
-                { new Rook(1), new Knight(1), new Fool(1), new Queen(1), new King(1), new Fool(1), new Knight(1), new Rook(1) }
+                { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null },
             };
         }
 
@@ -67,6 +77,7 @@ namespace Script.Managers {
                     Instantiate((i + j) % 2 == 0 ? WhiteSquarePrefab : BlackSquarePrefab, BoardTransform);
                 }
             }
+
             // Instantiate Pieces
             for (int i = 0; i < board.GetLength(0); i++) {
                 for (int j = 0; j < board.GetLength(1); j++) {
@@ -83,41 +94,60 @@ namespace Script.Managers {
             if (type == typeof(Rook) && piece.ColorMultiplier == 1) {
                 return WhiteRook;
             }
+
             if (type == typeof(Knight) && piece.ColorMultiplier == 1) {
                 return WhiteKnight;
             }
+
             if (type == typeof(Fool) && piece.ColorMultiplier == 1) {
                 return WhiteFool;
             }
+
             if (type == typeof(Queen) && piece.ColorMultiplier == 1) {
                 return WhiteQueen;
             }
+
             if (type == typeof(King) && piece.ColorMultiplier == 1) {
                 return WhiteKing;
             }
+
             if (type == typeof(Pawn) && piece.ColorMultiplier == 1) {
                 return WhitePawn;
             }
+
             if (type == typeof(Rook) && piece.ColorMultiplier == -1) {
                 return BlackRook;
             }
+
             if (type == typeof(Knight) && piece.ColorMultiplier == -1) {
                 return BlackKnight;
             }
+
             if (type == typeof(Fool) && piece.ColorMultiplier == -1) {
                 return BlackFool;
             }
+
             if (type == typeof(Queen) && piece.ColorMultiplier == -1) {
                 return BlackQueen;
             }
+
             if (type == typeof(King) && piece.ColorMultiplier == -1) {
                 return BlackKing;
             }
+
             if (type == typeof(Pawn) && piece.ColorMultiplier == -1) {
                 return BlackPawn;
             }
+
             throw new Exception("Cannot find any sprite for " + type);
         }
-    
+
+        static int Evaluation(Piece[,] currentBoard) {
+            int value = 0;
+            foreach (Piece piece in currentBoard) {
+                value += piece.IdPiece;
+            }
+            return value;
+        }
     }
 }

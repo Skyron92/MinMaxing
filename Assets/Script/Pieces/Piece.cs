@@ -6,10 +6,9 @@ using UnityEngine.UI;
 
 namespace Script.Pieces {
     public abstract class Piece {
-        public int ColorMultiplier, TypeOfPiece, IdPiece, score;
+        public int ColorMultiplier, TypeOfPiece, IdPiece;
         public Image sprite;
-        public bool CanMove, isNull;
-        
+
         private DataManager _dataManager => DataManager.Instance;
 
         private Vector2Int Coordinate {
@@ -27,7 +26,7 @@ namespace Script.Pieces {
         protected int X => Coordinate.x;
         protected int Y => Coordinate.y;
         
-        public List<Vector2Int> XMoves {
+        public List<Vector2Int> YMoves {
             get {
                 // Right Move
                 List<Vector2Int> vector2Ints = new List<Vector2Int>();
@@ -45,7 +44,7 @@ namespace Script.Pieces {
                 }
                 // Left Move
                 for (int i = X - 1; i >= 0; i--) {
-                    Vector2Int vector2Int = new Vector2Int(X - i, Y);
+                    Vector2Int vector2Int = new Vector2Int(i, Y);
                     Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
                     if (piece != null) {
                         if (piece.ColorMultiplier == ColorMultiplier) {
@@ -60,27 +59,44 @@ namespace Script.Pieces {
             }
         }
 
-        public List<Vector2Int> YMoves {
+        public List<Vector2Int> RightMoves {
             get {
                 List<Vector2Int> vector2Ints = new List<Vector2Int>();
-                // Forward move
-                for (int i = Y - 1; i >= 0; i--) {
-                    Vector2Int vector2Int = new Vector2Int(X, i);
-                    Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
-                    if (piece != null) {
-                        if(piece.ColorMultiplier == ColorMultiplier) break;
-                        vector2Ints.Add(vector2Int);
-                    }
-                }
-                // Backward move
+                
+                // Right move
                 for (int i = Y + 1; i <= 7; i++) {
                     Vector2Int vector2Int = new Vector2Int(X, i);
                     Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
                     if (piece != null) {
-                        if(piece.ColorMultiplier == ColorMultiplier) break;
+                        if (piece.ColorMultiplier == ColorMultiplier) {
+                            break;
+                        }
                         vector2Ints.Add(vector2Int);
+                        break;
                     }
+                    vector2Ints.Add(vector2Int);
                 }
+                return vector2Ints;
+            }
+        }
+
+        public List<Vector2Int> LeftMoves {
+            get {
+                List<Vector2Int> vector2Ints = new List<Vector2Int>();
+                // Left move
+                for (int i = Y - 1; i >= 0; i--) {
+                    Vector2Int vector2Int = new Vector2Int(X, i);
+                    Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
+                    if (piece != null) {
+                        if (piece.ColorMultiplier == ColorMultiplier) {
+                            break;
+                        }
+                        vector2Ints.Add(vector2Int); 
+                        break;
+                    }
+                    vector2Ints.Add(vector2Int);
+                }
+
                 return vector2Ints;
             }
         }
@@ -89,48 +105,57 @@ namespace Script.Pieces {
             get {
                 List<Vector2Int> vector2Ints = new List<Vector2Int>();
                 // BottomRight move
-                for (int i = X + 1; i <= 7; i++) {
-                    for (int j = Y + 1; j <= 7; j++) {
-                        Vector2Int vector2Int = new Vector2Int(i, j);
+                for (int i = 1; X + i <= 7 && Y + i <= 7; i++) {
+                    Vector2Int vector2Int = new Vector2Int(X + i, Y + i);
                         Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
                         if (piece != null) {
-                            if(piece.ColorMultiplier == ColorMultiplier) break;
+                            if (piece.ColorMultiplier == ColorMultiplier) {
+                                break;
+                            }
                             vector2Ints.Add(vector2Int);
+                            break;
                         }
-                    }
+                        vector2Ints.Add(vector2Int);
                 }
                 // TopLeft move
-                for (int i = X - 1; i >= 0; i--) {
-                    for (int j = Y - 1; j >= 0; j--) {
-                        Vector2Int vector2Int = new Vector2Int(i, j);
+                for (int i = 1; X + i <= 7 && Y - i >= 0; i++) {
+                    Vector2Int vector2Int = new Vector2Int(X + i, Y - i);
                         Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
                         if (piece != null) {
-                            if(piece.ColorMultiplier == ColorMultiplier) break;
+                            if (piece.ColorMultiplier == ColorMultiplier) {
+                                break;
+                            }
                             vector2Ints.Add(vector2Int);
+                            break;
                         }
-                    }
+                        vector2Ints.Add(vector2Int);
                 }
                 // BottomLeft move
-                for (int i = X + 1; i <= 7; i++) {
-                    for (int j = Y - 1; j >= 0; j--) {
-                        Vector2Int vector2Int = new Vector2Int(i, j);
+                for (int i = 1; X - i >= 0 && Y + i <= 7; i++) {
+                    Vector2Int vector2Int = new Vector2Int(X - i, Y + i);
                         Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
                         if (piece != null) {
-                            if(piece.ColorMultiplier == ColorMultiplier) break;
+                            if (piece.ColorMultiplier == ColorMultiplier) {
+                                break;
+                            }
                             vector2Ints.Add(vector2Int);
+                            break;
                         }
-                    }
+                        vector2Ints.Add(vector2Int);
+                    
                 }
                 // TopRight move
-                for (int i = X - 1; i >= 0; i--) {
-                    for (int j = Y + 1; j <= 7; j++) {
-                        Vector2Int vector2Int = new Vector2Int(i, j);
+                for (int i = 1; X - i >= 0 && Y - i >= 0; i++) {
+                    Vector2Int vector2Int = new Vector2Int(X - i, Y - i);
                         Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
                         if (piece != null) {
-                            if(piece.ColorMultiplier == ColorMultiplier) break;
+                            if (piece.ColorMultiplier == ColorMultiplier) {
+                                break;
+                            }
                             vector2Ints.Add(vector2Int);
+                            break;
                         }
-                    }
+                        vector2Ints.Add(vector2Int);
                 }
                 return vector2Ints;
             }
@@ -140,11 +165,20 @@ namespace Script.Pieces {
             ColorMultiplier = colorMultiplier;
         }
 
+        public Piece GetPiece(Vector2Int vector2Int) {
+            Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
+            return piece;
+        }
+
         public abstract List<Vector2Int> AvailableMove();
         
 
         private void OnDestroy() {
-            score -= IdPiece;
+            _dataManager.Score -= IdPiece;
+        }
+        
+        public bool IsInBoard(Vector2Int vector2Int) {
+            return vector2Int.x >= 0 && vector2Int.x <= 7 && vector2Int.y >= 0 && vector2Int.y <= 7;
         }
     }
 }
