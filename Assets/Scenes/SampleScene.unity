@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
+  isYourTurn: 0
 --- !u!1 &417859324
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,6 +447,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
+  isYourTurn: 0
 --- !u!1 &614912815
 GameObject:
   m_ObjectHideFlags: 0

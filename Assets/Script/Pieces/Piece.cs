@@ -6,8 +6,10 @@ using UnityEngine.UI;
 
 namespace Script.Pieces {
     public abstract class Piece {
-        public int ColorMultiplier, TypeOfPiece, IdPiece;
-        public Image sprite;
+        public int ColorMultiplier;
+        protected int TypeOfPiece;
+        public int IdPiece;
+        protected Image sprite;
 
         private DataManager _dataManager => DataManager.Instance;
 

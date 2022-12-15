@@ -24,7 +24,6 @@ namespace Script.Managers {
             Instance = this;
             board = UseTestingBoard ? GenerateTestingBoard() : GenerateBoard();
             DisplayBoard();
-            
         }
 
         private void Update() {
