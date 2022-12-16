@@ -13,7 +13,7 @@ namespace Script.Pieces {
 
         private DataManager _dataManager => DataManager.Instance;
 
-        private Vector2Int Coordinate {
+        public Vector2Int Coordinate {
             get {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
@@ -173,12 +173,7 @@ namespace Script.Pieces {
         }
 
         public abstract List<Vector2Int> AvailableMove();
-        
 
-        private void OnDestroy() {
-            _dataManager.Score -= IdPiece;
-        }
-        
         public bool IsInBoard(Vector2Int vector2Int) {
             return vector2Int.x >= 0 && vector2Int.x <= 7 && vector2Int.y >= 0 && vector2Int.y <= 7;
         }

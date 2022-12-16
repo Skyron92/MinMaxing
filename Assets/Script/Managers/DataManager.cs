@@ -9,7 +9,6 @@ namespace Script.Managers {
         private Canvas fdes;
 
         public bool UseTestingBoard;
-        public int Score;
         public Transform BoardTransform;
         public Transform PiecesTransform;
         public GameObject WhiteSquarePrefab, BlackSquarePrefab, PiecePrefab;
@@ -18,7 +17,7 @@ namespace Script.Managers {
         public Sprite BlackRook, BlackKnight, BlackFool, BlackQueen, BlackKing, BlackPawn;
 
         public Piece[,] board = new Piece[8, 8];
-        public static DataManager Instance;
+        public static DataManager Instance = new DataManager();
 
         private void Awake() {
             Instance = this;
