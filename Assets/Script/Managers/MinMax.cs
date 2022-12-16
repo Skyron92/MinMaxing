@@ -15,6 +15,7 @@ namespace Script.Managers {
         public TextMeshProUGUI Text;
         private bool isWhite = true;
         private int _score;
+        public int Depth;
         private DataManager _dataManager => DataManager.Instance;
 
         public enum Team {
@@ -33,8 +34,6 @@ namespace Script.Managers {
                         break;
                 }
             }
-            Debug.Log(_myPiece);
-            
         }
 
         private void Update() {
@@ -42,27 +41,48 @@ namespace Script.Managers {
             Text.color = isWhite ? Color.black : Color.white;
         }
 
+        
         private void Move(Piece piece, Vector2Int vector2Int) {
             if (!isYourTurn) return;
             int i = piece.Coordinate.x;
             int j = piece.Coordinate.y;
-
-            _dataManager.board[i, j] = null;
+            
             Piece target = _dataManager.board[vector2Int.x, vector2Int.y];
             if(target != null) Kill(target);
             target = piece;
+            _dataManager.board[i, j] = null;
+            _dataManager.DisplayPieces();
             Opponent.isYourTurn = isYourTurn;
             isYourTurn = !isYourTurn;
             isWhite = !isWhite;
         }
 
-        private int Evaluation(Piece[,] currentBoard) {
-            int value = 0;
-            foreach (Piece piece in currentBoard) {
-                if (team == Team.White) value += piece.IdPiece;
-                if (team == Team.Black) value -= piece.IdPiece;
+        private Vector2Int Evaluation(Piece[,] currentBoard, int depth) {
+            Vector2Int BestMove;
+            Vector2Int MyMove;
+            int currentScore = _score;
+            foreach (Piece piece in _dataManager.board) {
+                foreach (Vector2Int vector2Int in piece.AvailableMove()) {
+                    int value = 0;
+                    Piece[,] Node = _dataManager.board;
+                    Piece target = _dataManager.board[vector2Int.x, vector2Int.y];
+                    if (target == null) continue;
+                    bool isWhitePiece = target.ColorMultiplier == 1;
+                    switch (isWhitePiece) {
+                        case true when team == Team.Black:
+                        case false when team == Team.White:
+                            Kill(target);
+                            value += GetValue(vector2Int);
+                            break;
+                    }
+                    
+                }
             }
-            return value;
+            _score = currentScore;
+        }
+
+        private int GetValue(Vector2Int vector2Int) {
+            
         }
 
         private void Kill(Piece piece) {

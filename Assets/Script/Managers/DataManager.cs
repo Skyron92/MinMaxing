@@ -89,6 +89,16 @@ namespace Script.Managers {
             }
         }
 
+        public void DisplayPieces() {
+            for (int i = 0; i < board.GetLength(0); i++) {
+                for (int j = 0; j < board.GetLength(1); j++) {
+                    Piece piece = board[i, j];
+                    GameObject instantiate = Instantiate(PiecePrefab, PiecesTransform);
+                    instantiate.GetComponent<Image>().sprite = GetSprite(piece);
+                }
+            }
+        }
+
         private Sprite GetSprite(Piece piece) {
             if (piece == null) return Empty;
             Type type = piece.GetType();
