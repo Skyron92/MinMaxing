@@ -15,6 +15,21 @@ namespace Script.Pieces {
             IdPiece = TypeOfPiece * ColorMultiplier;
         }
 
+        public void Update() {
+            if (ColorMultiplier == 1) {
+                if (Coordinate.x == 6) hasMoved = false;
+                else {
+                    hasMoved = true;
+                }
+            }
+            if (ColorMultiplier == -1) {
+                if (Coordinate.x == 1) hasMoved = false;
+                else {
+                    hasMoved = true;
+                }
+            }
+        }
+
         public override List<Vector2Int> AvailableMove() {
             var list = new List<Vector2Int>();
             
