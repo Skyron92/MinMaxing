@@ -13,7 +13,7 @@ namespace Script.Managers {
         public bool isYourTurn;
         public Button CurrentTurn;
         public TextMeshProUGUI Text;
-        private bool isWhite = true, isMaximizing;
+        private bool isWhite = true, isMaximizing, gameOver;
         private int _score;
         public int Depth;
         private int teamMultiplier;
@@ -47,9 +47,11 @@ namespace Script.Managers {
         }
 
         private void Test() {
-            if (Input.GetButtonDown("Fire2")) {
-                Debug.Log(GetNodes(_dataManager.board, 0).Count);
+            if (Input.GetButtonDown("Fire1")) {
+                Debug.Log(EvaluateBoard(_dataManager.board));
             }
+            
+            
         }
 
         
@@ -66,6 +68,7 @@ namespace Script.Managers {
             Opponent.isYourTurn = isYourTurn;
             isYourTurn = !isYourTurn;
             isWhite = !isWhite;
+            
         }
         
         private Piece[,] TheoricMove(Piece[,] board, Piece piece, Vector2Int vector2Int) {
@@ -78,41 +81,46 @@ namespace Script.Managers {
             board[i, j] = null;
             return board;
         }
+        
+        
 
-        private List<List<Piece[,]>> GetNodes(Piece[,] board, int depth) {
-            List<List<Piece[,]>> path = new List<List<Piece[,]>>();
-            List<Piece[,]> nodes = new List<Piece[,]>();
-            Piece[,] current = board;
-            int indice = 0;
-            foreach (Piece piece in current) {
-                    if (piece == null) continue;
-                    List<Vector2Int> vector2Ints = piece.AvailableMove();
-                    foreach (Vector2Int move in vector2Ints) {
-                        int value = GetValue(move);
-                        nodes.Add(TheoricMove(current, piece, move));
-                        indice += EvaluateBoard(TheoricMove(current, piece, move));
-                        
-                        path.Add(nodes);
-                    } 
+      /*  private void Minimax(Piece[,] board, int depth, Team team) {
+            if (gameOver || depth < 0) return;
+            Piece[,] move = new Piece[8,8];
+            Piece[,] bestMove = new Piece[8,8];
+            foreach (var list in GetNodes(board, depth)) {
+                foreach (var plateau in list) {
+                    EvaluateBoard(plateau);
+                    if (isMaximizing) {
+                        int maxEval;
+                    }
+                }
             }
-            depth--;
-            foreach (Piece[,] node in nodes) {
-                if (depth >= 0) GetNodes(node, depth);
+
+            
+        }*/
+
+        private void GetNodes(Piece[,] board, int depth) {
+            if (depth > 0) {
+                List<List<Piece[,]>> Tree = new List<List<Piece[,]>>();
+                List<Piece[,]> Actions = new List<Piece[,]>();
+                Piece[,] Node = board;
             }
-            return path;
+            
+
         }
 
         private int EvaluateBoard(Piece[,] board) {
             int value = 0;
             foreach (var VARIABLE in board) {
                 if (VARIABLE == null) continue;
-                if (team == Team.Black) value -= VARIABLE.IdPiece;
-                if (team == Team.White) value += VARIABLE.IdPiece;
+                value += VARIABLE.IdPiece * 10;
+                value += VARIABLE.AvailableMove().Count * VARIABLE.ColorMultiplier;
             }
             return value;
         }
 
-        private Vector2Int Evaluation(Piece[,] currentBoard, int depth) {
+        /*private Vector2Int Evaluation(Piece[,] currentBoard, int depth) {
             Vector2Int BestMove = new Vector2Int();
             Vector2Int MyMove = new Vector2Int();
             int currentScore = _score;
@@ -140,7 +148,7 @@ namespace Script.Managers {
                 }
             }
             return MyMove;
-        }
+        }*/
 
         private int GetValue(Vector2Int vector2Int) {
             int value = 0;

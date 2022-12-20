@@ -9,13 +9,9 @@ namespace Script.Pieces {
         private bool hasMoved;
 
         public Pawn(int colorMultiplier) : base(colorMultiplier) { }
-    
-        public void Awake() {
-            TypeOfPiece = 1;
-            IdPiece = TypeOfPiece * ColorMultiplier;
-        }
 
-        public void Update() {
+        public override List<Vector2Int> AvailableMove() {
+            var list = new List<Vector2Int>();
             if (ColorMultiplier == 1) {
                 if (Coordinate.x == 6) hasMoved = false;
                 else {
@@ -28,13 +24,9 @@ namespace Script.Pieces {
                     hasMoved = true;
                 }
             }
-        }
-
-        public override List<Vector2Int> AvailableMove() {
-            var list = new List<Vector2Int>();
             
             // Simple Forward Move
-            Vector2Int vector2Int = new Vector2Int(X + ColorMultiplier, Y);
+            Vector2Int vector2Int = new Vector2Int(X - ColorMultiplier, Y);
             if (IsInBoard(vector2Int)) {
                 Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
                 if (piece == null) list.Add(vector2Int);
@@ -42,7 +34,7 @@ namespace Script.Pieces {
 
             //Double Forward Move
             if (!hasMoved) {
-                Vector2Int forward = new Vector2Int(X + 2 * ColorMultiplier, Y);
+                Vector2Int forward = new Vector2Int(X - 2 * ColorMultiplier, Y);
                 if (IsInBoard(forward)) {
                     Piece pieceForward = _dataManager.board[forward.x, forward.y];
                     Piece pieceFront = _dataManager.board[forward.x - 1, forward.y];

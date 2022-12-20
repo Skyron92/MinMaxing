@@ -172,6 +172,7 @@ MonoBehaviour:
   isYourTurn: 0
   CurrentTurn: {fileID: 1196668281}
   Text: {fileID: 614912817}
+  Depth: 0
 --- !u!1 &417859324
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,6 +455,7 @@ MonoBehaviour:
   isYourTurn: 0
   CurrentTurn: {fileID: 1196668281}
   Text: {fileID: 614912817}
+  Depth: 0
 --- !u!1 &614912815
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,8 +1057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7231be23582161c4eab03e350625f413, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UseTestingBoard: 0
-  Score: 0
+  UseTestingBoard: 1
   BoardTransform: {fileID: 602981557}
   PiecesTransform: {fileID: 1353418026}
   WhiteSquarePrefab: {fileID: 572619893142102885, guid: 32dc67f95cbc4a04f950fda1fa38d017, type: 3}

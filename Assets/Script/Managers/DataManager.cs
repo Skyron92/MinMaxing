@@ -23,9 +23,10 @@ namespace Script.Managers {
             Instance = this;
             board = UseTestingBoard ? GenerateTestingBoard() : GenerateBoard();
             DisplayBoard();
+            AttributeType();
         }
 
-        private void Update() {
+        /*private void Update() {
             if (Input.GetButtonDown("Fire1")) {
                 foreach (var piece in board) {
                     if (piece == null) continue;
@@ -34,7 +35,7 @@ namespace Script.Managers {
                     }
                 }
             }
-        }
+        }*/
 
         private Piece[,] GenerateBoard() {
             return new Piece[8, 8] {
@@ -63,8 +64,8 @@ namespace Script.Managers {
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
-                { null, null, null, null, new Fool(1), null, null, null },
-                { null, null, null, null, null, new Pawn(-1), null, null },
+                { null, null, new Pawn(-1), null, new Rook(1), null, null, null },
+                { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
@@ -85,6 +86,28 @@ namespace Script.Managers {
                     Piece piece = board[i, j];
                     GameObject instantiate = Instantiate(PiecePrefab, PiecesTransform);
                     instantiate.GetComponent<Image>().sprite = GetSprite(piece);
+                }
+            }
+        }
+
+        private void AttributeType() {
+            foreach (Piece piece in board) {
+                if(piece == null) continue;
+                Type type = piece.GetType();
+                if (type == typeof(Rook)) {
+                    piece.IdPiece = 5 * piece.ColorMultiplier;
+                }
+                if (type == typeof(Knight) || type == typeof(Fool)) {
+                    piece.IdPiece = 3 * piece.ColorMultiplier;
+                }
+                if (type == typeof(Queen)) {
+                    piece.IdPiece = 10 * piece.ColorMultiplier;
+                }
+                if (type == typeof(King)) {
+                    piece.IdPiece = 150 * piece.ColorMultiplier;
+                }
+                if (type == typeof(Pawn)) {
+                    piece.IdPiece = 1 * piece.ColorMultiplier;
                 }
             }
         }
