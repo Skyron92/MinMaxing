@@ -13,7 +13,7 @@ namespace Script.Managers {
         public bool isYourTurn;
         public Button CurrentTurn;
         public TextMeshProUGUI Text;
-        private bool isWhite = true, isMaximizing, gameOver;
+        private bool isWhite = true, isMaximizing = true, gameOver;
         private int _score;
         public int Depth;
         private int teamMultiplier;
@@ -85,6 +85,9 @@ namespace Script.Managers {
             int j = piece.Coordinate.y;
             board[vector2Int.x, vector2Int.y] = piece;
             if (wasATargetHere && cible != null) board[i, j] = cible;
+            else {
+                board[i, j] = null;
+            }
             return board;
         }
 
@@ -101,6 +104,12 @@ namespace Script.Managers {
                 }
             }
         }*/
+
+      private void ChooseTheBestMove(Piece [,] board) {
+          int bestValue;
+          if (isYourTurn) bestValue = MiniMax(board, 1);
+
+      }
       
       private int MiniMax(Piece[,] board, int depth) {
           int value = 0;
@@ -149,10 +158,11 @@ namespace Script.Managers {
                             cible = board[vector2Int.x, vector2Int.y];
                         }
                         
-                        Piece[,] Node = board;
+                        Piece[,] Node = new Piece[8,8];
+                        Array.Copy(board, Node, 64);
                         Node = TheoricMove(Node, piece, vector2Int);
                         Actions.Add(Node);
-                        Node = CancelMove(board, piece, position, wasATargetHere, cible);
+                       // Node = CancelMove(board, piece, position, wasATargetHere, cible);
                     }
                 }
                 tree.Add(Actions);
@@ -169,8 +179,16 @@ namespace Script.Managers {
             int value = 0;
             foreach (var VARIABLE in board) {
                 if (VARIABLE == null) continue;
-                value += VARIABLE.IdPiece * 10;
-                value += VARIABLE.AvailableMove().Count * VARIABLE.ColorMultiplier;
+                switch (team) {
+                    case Team.White:
+                        value += VARIABLE.IdPiece * 10;
+                        value += VARIABLE.AvailableMove().Count * VARIABLE.ColorMultiplier;
+                        break;
+                    case Team.Black:
+                        value -= VARIABLE.IdPiece * 10;
+                        value -= VARIABLE.AvailableMove().Count * VARIABLE.ColorMultiplier;
+                        break;
+                }
             }
             return value;
         }
