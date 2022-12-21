@@ -36,7 +36,7 @@ namespace Script.Managers {
                         break;
                 }
                 if (team == Team.Black) teamMultiplier = -1;
-                if (team == Team.White) teamMultiplier = 1;
+                if (team == Team.White) {teamMultiplier = 1;}
             }
         }
 
@@ -48,10 +48,8 @@ namespace Script.Managers {
 
         private void Test() {
             if (Input.GetButtonDown("Fire1")) {
-                Debug.Log(EvaluateBoard(_dataManager.board));
+                Debug.Log(MiniMax(_dataManager.board, 1));
             }
-            
-            
         }
 
         
@@ -77,12 +75,18 @@ namespace Script.Managers {
             
             Piece target = board[vector2Int.x, vector2Int.y];
             if(target != null) Kill(target);
-            target = piece;
+            board[vector2Int.x, vector2Int.y] = piece;
             board[i, j] = null;
             return board;
         }
-        
-        
+
+        private Piece[,] CancelMove(Piece[,] board, Piece piece, Vector2Int vector2Int, bool wasATargetHere, Piece cible) {
+            int i = piece.Coordinate.x;
+            int j = piece.Coordinate.y;
+            board[vector2Int.x, vector2Int.y] = piece;
+            if (wasATargetHere && cible != null) board[i, j] = cible;
+            return board;
+        }
 
       /*  private void Minimax(Piece[,] board, int depth, Team team) {
             if (gameOver || depth < 0) return;
@@ -96,18 +100,69 @@ namespace Script.Managers {
                     }
                 }
             }
-
-            
         }*/
+      
+      private int MiniMax(Piece[,] board, int depth) {
+          int value = 0;
+          List<List<Piece[,]>> Tree = GetNodes(board, depth);
+          for (int i = depth - 1; i < Tree.Count; i++) {
+              if (isMaximizing) {
+                  value = -50000;
+                  for (int j = 0; j < Tree[i].Count; j++) {
+                      int index = EvaluateBoard(Tree[i][j]);
+                      if (index > value) {
+                          value = index;
+                      }
+                  }
+                  depth--;
+                  isMaximizing = !isMaximizing;
+              }
+              else {
+                  value = +50000;
+                  for (int j = 0; j < Tree[i].Count; j++) {
+                      int index = EvaluateBoard(Tree[i][j]);
+                      if (index < value) {
+                          value = index;
+                      }
+                  }
+                  depth--;
+                  isMaximizing = !isMaximizing;
+              }
+          } 
+          return value;
+      }
 
-        private void GetNodes(Piece[,] board, int depth) {
+        private List<List<Piece[,]>> GetNodes(in Piece[,] board, int depth) {
+            List<List<Piece[,]>> Tree = new List<List<Piece[,]>>();
             if (depth > 0) {
-                List<List<Piece[,]>> Tree = new List<List<Piece[,]>>();
+                List<List<Piece[,]>> tree = new List<List<Piece[,]>>();
                 List<Piece[,]> Actions = new List<Piece[,]>();
-                Piece[,] Node = board;
+                foreach (Piece piece in board) {
+                    if(piece == null) continue;
+                    Vector2Int position = new Vector2Int(piece.Coordinate.x, piece.Coordinate.y);
+                    List<Vector2Int> move = piece.AvailableMove();
+                    foreach (Vector2Int vector2Int in move) {
+                        bool wasATargetHere = false;
+                        Piece cible = null;
+                        if (board[vector2Int.x, vector2Int.y] != null) {
+                            wasATargetHere = true;
+                            cible = board[vector2Int.x, vector2Int.y];
+                        }
+                        
+                        Piece[,] Node = board;
+                        Node = TheoricMove(Node, piece, vector2Int);
+                        Actions.Add(Node);
+                        Node = CancelMove(board, piece, position, wasATargetHere, cible);
+                    }
+                }
+                tree.Add(Actions);
+                depth--;
+                foreach (var possibilité in Actions) {
+                    GetNodes(possibilité, depth);
+                }
+                Tree = tree;
             }
-            
-
+            return Tree;
         }
 
         private int EvaluateBoard(Piece[,] board) {
