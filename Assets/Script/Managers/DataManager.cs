@@ -22,20 +22,16 @@ namespace Script.Managers {
         private void Awake() {
             Instance = this;
             board = UseTestingBoard ? GenerateTestingBoard() : GenerateBoard();
-            DisplayBoard();
+            DisplayBoard(board);
             AttributeType();
         }
 
-        /*private void Update() {
+        private void Update() {
             if (Input.GetButtonDown("Fire1")) {
-                foreach (var piece in board) {
-                    if (piece == null) continue;
-                    foreach (Vector2Int vector2Int in piece.AvailableMove()) {
-                        Debug.Log(vector2Int);
-                    }
-                }
+                board = MinMax.NewBoard;
+                DisplayBoard(board);
             }
-        }*/
+        }
 
         private Piece[,] GenerateBoard() {
             return new Piece[8, 8] {
@@ -65,14 +61,14 @@ namespace Script.Managers {
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
                 { null, null, new Pawn(-1), null, new Rook(1), null, null, null },
+                { null, new King(1), null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
+                { null, null, null, new Fool(-1), null, null, null, null },
                 { null, null, null, null, null, null, null, null },
             };
         }
 
-        private void DisplayBoard() {
+        private void DisplayBoard(Piece [,] board) {
             // Instantiate Squares
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
@@ -112,7 +108,7 @@ namespace Script.Managers {
             }
         }
 
-        public void DisplayPieces() {
+        public void DisplayPieces(Piece[,] board) {
             for (int i = 0; i < board.GetLength(0); i++) {
                 for (int j = 0; j < board.GetLength(1); j++) {
                     Piece piece = board[i, j];

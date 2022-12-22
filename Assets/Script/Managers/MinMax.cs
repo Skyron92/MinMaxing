@@ -5,11 +5,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 namespace Script.Managers {
     public class MinMax : MonoBehaviour {
         [SerializeField] public Team team;
         [SerializeField] public MinMax Opponent;
         private List<Piece> _myPiece = new List<Piece>();
+        private List<Piece> _opponentPiece = new List<Piece>();
         public bool isYourTurn;
         public Button CurrentTurn;
         public TextMeshProUGUI Text;
@@ -18,7 +20,10 @@ namespace Script.Managers {
         public int Depth;
         private int teamMultiplier;
         private Piece[,] MyNode = new Piece[8, 8];
+        public static Piece[,] NewBoard = new Piece[8, 8];
         private DataManager _dataManager => DataManager.Instance;
+        private Vector2Int BestMove = new Vector2Int();
+        private Piece BestPiece;
 
         public enum Team {
             White,
@@ -27,12 +32,20 @@ namespace Script.Managers {
 
         private void Start() {
             isYourTurn = team == Team.White;
+            BestMove = new Vector2Int();
+            BestPiece = null;
             foreach (Piece piece in _dataManager.board) {
                 if(piece == null) continue;
                 switch (piece.ColorMultiplier) {
                     case 1 when team == Team.White:
                     case -1 when team == Team.Black:
                         _myPiece.Add(piece);
+                        break;
+                }
+                switch (piece.ColorMultiplier) {
+                    case -1 when team == Team.White:
+                    case 1 when team == Team.Black:
+                        _opponentPiece.Add(piece);
                         break;
                 }
                 if (team == Team.Black) teamMultiplier = -1;
@@ -48,25 +61,30 @@ namespace Script.Managers {
 
         private void Test() {
             if (Input.GetButtonDown("Fire1")) {
-                Debug.Log(MiniMax(_dataManager.board, 1));
+                if (isYourTurn) {
+                    MiniMax(_dataManager.board, 1);
+                    NewBoard = Move(_dataManager.board, BestPiece, BestMove);
+                    isYourTurn = !isYourTurn;
+                }
             }
         }
 
         
-        private void Move(Piece[,] board, Piece piece, Vector2Int vector2Int) {
-            if (!isYourTurn) return;
+        private Piece[,] Move(Piece[,] board, Piece piece, Vector2Int vector2Int) {
+            Piece[,] newBoard = new Piece[8, 8];
             int i = piece.Coordinate.x;
             int j = piece.Coordinate.y;
             
-            Piece target = _dataManager.board[vector2Int.x, vector2Int.y];
+            Piece target = board[vector2Int.x, vector2Int.y];
             if(target != null) Kill(target);
-            target = piece;
-            _dataManager.board[i, j] = null;
-            _dataManager.DisplayPieces();
+            board[vector2Int.x, vector2Int.y] = piece;
+            board[i, j] = null;
+            newBoard = board;
+            //_dataManager.DisplayPieces(board);
             Opponent.isYourTurn = isYourTurn;
             isYourTurn = !isYourTurn;
             isWhite = !isWhite;
-            
+            return newBoard;
         }
         
         private Piece[,] TheoricMove(Piece[,] board, Piece piece, Vector2Int vector2Int) {
@@ -106,8 +124,9 @@ namespace Script.Managers {
         }*/
 
       private void ChooseTheBestMove(Piece [,] board) {
-          int bestValue;
-          if (isYourTurn) bestValue = MiniMax(board, 1);
+          Vector2Int bestMove;
+          int index;
+          if (isYourTurn) index = MiniMax(board, 1);
 
       }
       
@@ -141,41 +160,49 @@ namespace Script.Managers {
           return value;
       }
 
-        private List<List<Piece[,]>> GetNodes(in Piece[,] board, int depth) {
-            List<List<Piece[,]>> Tree = new List<List<Piece[,]>>();
-            if (depth > 0) {
-                List<List<Piece[,]>> tree = new List<List<Piece[,]>>();
-                List<Piece[,]> Actions = new List<Piece[,]>();
-                foreach (Piece piece in board) {
-                    if(piece == null) continue;
-                    Vector2Int position = new Vector2Int(piece.Coordinate.x, piece.Coordinate.y);
-                    List<Vector2Int> move = piece.AvailableMove();
-                    foreach (Vector2Int vector2Int in move) {
-                        bool wasATargetHere = false;
-                        Piece cible = null;
-                        if (board[vector2Int.x, vector2Int.y] != null) {
-                            wasATargetHere = true;
-                            cible = board[vector2Int.x, vector2Int.y];
-                        }
-                        
-                        Piece[,] Node = new Piece[8,8];
-                        Array.Copy(board, Node, 64);
-                        Node = TheoricMove(Node, piece, vector2Int);
-                        Actions.Add(Node);
-                       // Node = CancelMove(board, piece, position, wasATargetHere, cible);
-                    }
-                }
-                tree.Add(Actions);
-                depth--;
-                foreach (var possibilité in Actions) {
-                    GetNodes(possibilité, depth);
-                }
-                Tree = tree;
-            }
-            return Tree;
-        }
+      private List<List<Piece[,]>> GetNodes(Piece[,] board, int depth) {
+          List<List<Piece[,]>> Tree = new List<List<Piece[,]>>();
+          int maxValue = -99999;
+          if (depth > 0) {
+              List<List<Piece[,]>> tree = new List<List<Piece[,]>>();
+              List<Piece[,]> Actions = new List<Piece[,]>();
+              foreach (Piece piece in board) {
+                  if(piece == null) continue;
+                  Vector2Int position = new Vector2Int(piece.Coordinate.x, piece.Coordinate.y);
+                  List<Vector2Int> move = piece.AvailableMove();
+                  foreach (Vector2Int vector2Int in move) {
+                      int value = 0;
+                      bool wasATargetHere = false;
+                      Piece cible = null;
+                      if (board[vector2Int.x, vector2Int.y] != null) { 
+                          wasATargetHere = true;
+                          cible = board[vector2Int.x, vector2Int.y];
+                      }
+                      Piece[,] Node = new Piece[8,8];
+                      Array.Copy(board, Node, 64);
+                      Node = TheoricMove(Node, piece, vector2Int);
+                      value = EvaluateBoard(Node);
+                      if (piece.ColorMultiplier == teamMultiplier) {
+                          if (value > maxValue) {
+                              maxValue = value;
+                              BestMove = vector2Int;
+                              BestPiece = piece;
+                          }
+                      }
+                      Actions.Add(Node);
+                  }
+              }
+              tree.Add(Actions);
+              depth--;
+              foreach (var possibilité in Actions) {
+                  GetNodes(possibilité, depth);
+              }
+              Tree = tree;
+          }
+          return Tree;
+      }
 
-        private int EvaluateBoard(Piece[,] board) {
+      private int EvaluateBoard(Piece[,] board) {
             int value = 0;
             foreach (var VARIABLE in board) {
                 if (VARIABLE == null) continue;
@@ -234,6 +261,8 @@ namespace Script.Managers {
         private void Kill(Piece piece) {
             if (team == Team.White) _score += piece.IdPiece;
             if (team == Team.Black) _score -= piece.IdPiece;
+            if (_myPiece.Contains(piece)) _myPiece.Remove(piece);
+            if (_opponentPiece.Contains(piece)) _opponentPiece.Remove(piece);
             _dataManager.board[piece.Coordinate.x, piece.Coordinate.y] = null;
         }
 
