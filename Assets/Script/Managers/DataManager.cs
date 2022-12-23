@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Script.Pieces;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,14 +23,16 @@ namespace Script.Managers {
         private void Awake() {
             Instance = this;
             board = UseTestingBoard ? GenerateTestingBoard() : GenerateBoard();
-            DisplayBoard(board);
+            DisplayBoard();
+            DisplayPieces(board);
             AttributeType();
         }
 
         private void Update() {
             if (Input.GetButtonDown("Fire1")) {
+                DestroyPieces();
                 board = MinMax.NewBoard;
-                DisplayBoard(board);
+                DisplayPieces(board);
             }
         }
 
@@ -61,14 +64,14 @@ namespace Script.Managers {
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
                 { null, null, new Pawn(-1), null, new Rook(1), null, null, null },
-                { null, new King(1), null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
-                { null, null, null, new Fool(-1), null, null, null, null },
+                { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
             };
         }
 
-        private void DisplayBoard(Piece [,] board) {
+        private void DisplayBoard() {
             // Instantiate Squares
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
@@ -76,14 +79,14 @@ namespace Script.Managers {
                 }
             }
 
-            // Instantiate Pieces
+            /*/ Instantiate Pieces
             for (int i = 0; i < board.GetLength(0); i++) {
                 for (int j = 0; j < board.GetLength(1); j++) {
                     Piece piece = board[i, j];
                     GameObject instantiate = Instantiate(PiecePrefab, PiecesTransform);
                     instantiate.GetComponent<Image>().sprite = GetSprite(piece);
                 }
-            }
+            }*/
         }
 
         private void AttributeType() {
@@ -115,6 +118,17 @@ namespace Script.Managers {
                     GameObject instantiate = Instantiate(PiecePrefab, PiecesTransform);
                     instantiate.GetComponent<Image>().sprite = GetSprite(piece);
                 }
+            }
+        }
+
+        public void DestroyPieces()
+        {
+            List<GameObject> child = new List<GameObject>();
+            for (int i = 0; i < PiecesTransform.childCount; i++) {
+                child.Add(PiecesTransform.GetChild(i).GetComponent<GameObject>());
+            }
+            foreach (var VARIABLE in child) {
+                Destroy(VARIABLE);
             }
         }
 
