@@ -25,6 +25,9 @@ namespace Script.Pieces {
                 if (pieceX1Y2 != null) {
                     if (pieceX1Y2.ColorMultiplier != ColorMultiplier) list.Add(X1Y2);
                 }
+                else {
+                    list.Add(X1Y2);
+                }
             }
 
             // X-1, Y2
@@ -33,6 +36,9 @@ namespace Script.Pieces {
                 Piece piecex1Y2 = _dataManager.board[x1Y2.x, x1Y2.y];
                 if (piecex1Y2 != null) {
                     if (piecex1Y2.ColorMultiplier != ColorMultiplier) list.Add(x1Y2);
+                }
+                else {
+                    list.Add(x1Y2);
                 }
             }
 
@@ -43,6 +49,9 @@ namespace Script.Pieces {
                 if (pieceX1y2 != null) {
                     if (pieceX1y2.ColorMultiplier != ColorMultiplier) list.Add(X1y2);
                 }
+                else {
+                    list.Add(X1y2);
+                }
             }
 
             // X-1, Y-2
@@ -51,6 +60,9 @@ namespace Script.Pieces {
                 Piece piecex1y2 = _dataManager.board[x1y2.x, x1y2.y];
                 if (piecex1y2 != null) {
                     if (piecex1y2.ColorMultiplier != ColorMultiplier) list.Add(x1y2);
+                }
+                else {
+                    list.Add(x1y2);
                 }
             }
 
@@ -61,6 +73,9 @@ namespace Script.Pieces {
                 if (pieceX2Y1 != null) {
                     if (pieceX2Y1.ColorMultiplier != ColorMultiplier) list.Add(X2Y1);
                 }
+                else {
+                    list.Add(X2Y1);
+                }
             }
 
             // X2, Y-1
@@ -69,6 +84,9 @@ namespace Script.Pieces {
                 Piece pieceX2y1 = _dataManager.board[X2y1.x, X2y1.y];
                 if (pieceX2y1 != null) {
                     if (pieceX2y1.ColorMultiplier != ColorMultiplier) list.Add(X2y1);
+                }
+                else {
+                    list.Add(X2y1);
                 }
             }
 
@@ -79,6 +97,9 @@ namespace Script.Pieces {
                 if (piecex2y1 != null) {
                     if (piecex2y1.ColorMultiplier != ColorMultiplier) list.Add(x2y1);
                 }
+                else {
+                    list.Add(x1y2);
+                }
             }
 
             // X-2, Y1
@@ -87,6 +108,9 @@ namespace Script.Pieces {
                 Piece piecex2Y1 = _dataManager.board[x2Y1.x, x2Y1.y];
                 if (piecex2Y1 != null) {
                     if (piecex2Y1.ColorMultiplier != ColorMultiplier) list.Add(x2Y1);
+                }
+                else {
+                    list.Add(x2y1);
                 }
             }
 

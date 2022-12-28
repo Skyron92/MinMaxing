@@ -62,7 +62,7 @@ namespace Script.Managers {
         private void Test() {
             if (Input.GetButtonDown("Fire1")) {
                 if (isYourTurn) {
-                    MiniMax(_dataManager.board, 1);
+                    MiniMax(_dataManager.board, 2);
                     NewBoard = Move(_dataManager.board, BestPiece, BestMove);
                     isYourTurn = !isYourTurn;
                 }

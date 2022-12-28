@@ -16,6 +16,7 @@ namespace Script.Managers {
         public Sprite Empty;
         public Sprite WhiteRook, WhiteKnight, WhiteFool, WhiteQueen, WhiteKing, WhitePawn;
         public Sprite BlackRook, BlackKnight, BlackFool, BlackQueen, BlackKing, BlackPawn;
+        public List<GameObject> sprites = new List<GameObject>();
 
         public Piece[,] board = new Piece[8, 8];
         public static DataManager Instance = new DataManager();
@@ -116,18 +117,14 @@ namespace Script.Managers {
                 for (int j = 0; j < board.GetLength(1); j++) {
                     Piece piece = board[i, j];
                     GameObject instantiate = Instantiate(PiecePrefab, PiecesTransform);
+                    sprites.Add(instantiate);
                     instantiate.GetComponent<Image>().sprite = GetSprite(piece);
                 }
             }
         }
 
-        public void DestroyPieces()
-        {
-            List<GameObject> child = new List<GameObject>();
-            for (int i = 0; i < PiecesTransform.childCount; i++) {
-                child.Add(PiecesTransform.GetChild(i).GetComponent<GameObject>());
-            }
-            foreach (var VARIABLE in child) {
+        public void DestroyPieces() {
+            foreach (var VARIABLE in sprites) {
                 Destroy(VARIABLE);
             }
         }
