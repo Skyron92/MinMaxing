@@ -12,6 +12,7 @@ namespace Script.Pieces {
 
         public override List<Vector2Int> AvailableMove(Piece[,] board) {
             var list = new List<Vector2Int>();
+            Board = board;
             if (ColorMultiplier == 1) {
                 if (Coordinate.x == 6) hasMoved = false;
                 else {

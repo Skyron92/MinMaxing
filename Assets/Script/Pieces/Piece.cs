@@ -19,7 +19,7 @@ namespace Script.Pieces {
             get {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (_dataManager.board[i, j] == this)
+                        if (Board[i, j] == this)
                             return new Vector2Int(i, j);
                     }
                 }
@@ -177,7 +177,7 @@ namespace Script.Pieces {
         public abstract List<Vector2Int> AvailableMove(Piece[,] board);
 
         public bool IsInBoard(Vector2Int vector2Int) {
-            return vector2Int.x is >= 0 && vector2Int.x <= 7 && vector2Int.y >= 0 && vector2Int.y <= 7;
+            return vector2Int.x >= 0 && vector2Int.x <= 7 && vector2Int.y >= 0 && vector2Int.y <= 7;
         }
     }
 }

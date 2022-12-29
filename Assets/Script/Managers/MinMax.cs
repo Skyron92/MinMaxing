@@ -64,7 +64,6 @@ namespace Script.Managers {
                 if (isYourTurn) {
                     MiniMax(_dataManager.board, 1);
                     NewBoard = Move(_dataManager.board, BestPiece, BestMove);
-                    isYourTurn = !isYourTurn;
                 }
             }
         }

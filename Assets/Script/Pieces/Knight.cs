@@ -17,6 +17,7 @@ namespace Script.Pieces {
 
         public override List<Vector2Int> AvailableMove(Piece[,] board) {
             List<Vector2Int> list = new List<Vector2Int>();
+            Board = board;
             
             // X1, Y2
             Vector2Int X1Y2 = new Vector2Int(X + 1, Y + 2);
@@ -98,7 +99,7 @@ namespace Script.Pieces {
                     if (piecex2y1.ColorMultiplier != ColorMultiplier) list.Add(x2y1);
                 }
                 else {
-                    list.Add(x1y2);
+                    list.Add(x2y1);
                 }
             }
 
@@ -110,7 +111,7 @@ namespace Script.Pieces {
                     if (piecex2Y1.ColorMultiplier != ColorMultiplier) list.Add(x2Y1);
                 }
                 else {
-                    list.Add(x2y1);
+                    list.Add(x2Y1);
                 }
             }
 
