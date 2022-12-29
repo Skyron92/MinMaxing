@@ -1057,7 +1057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7231be23582161c4eab03e350625f413, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UseTestingBoard: 1
+  UseTestingBoard: 0
   BoardTransform: {fileID: 602981557}
   PiecesTransform: {fileID: 1353418026}
   WhiteSquarePrefab: {fileID: 572619893142102885, guid: 32dc67f95cbc4a04f950fda1fa38d017, type: 3}
@@ -1076,3 +1076,4 @@ MonoBehaviour:
   BlackQueen: {fileID: 21300000, guid: e037975e99e9ed348b8b75e9ec845254, type: 3}
   BlackKing: {fileID: 21300000, guid: 1dc471087987abc48bdb327f2f2b5410, type: 3}
   BlackPawn: {fileID: 21300000, guid: 5d693103f8ccbb940adc66bc76eae27c, type: 3}
+  sprites: []

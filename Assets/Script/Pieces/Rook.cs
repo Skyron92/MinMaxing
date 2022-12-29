@@ -11,8 +11,9 @@ namespace Script.Pieces {
             IdPiece = TypeOfPiece * ColorMultiplier;
         }
 
-        public override List<Vector2Int> AvailableMove() {
+        public override List<Vector2Int> AvailableMove(Piece[,] board) {
             var list = new List<Vector2Int>();
+            Board = board;
             list.AddRange(YMoves);
             list.AddRange(RightMoves);
             list.AddRange(LeftMoves);

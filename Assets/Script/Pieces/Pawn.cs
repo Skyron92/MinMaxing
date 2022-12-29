@@ -10,7 +10,7 @@ namespace Script.Pieces {
 
         public Pawn(int colorMultiplier) : base(colorMultiplier) { }
 
-        public override List<Vector2Int> AvailableMove() {
+        public override List<Vector2Int> AvailableMove(Piece[,] board) {
             var list = new List<Vector2Int>();
             if (ColorMultiplier == 1) {
                 if (Coordinate.x == 6) hasMoved = false;
@@ -28,7 +28,7 @@ namespace Script.Pieces {
             // Simple Forward Move
             Vector2Int vector2Int = new Vector2Int(X - ColorMultiplier, Y);
             if (IsInBoard(vector2Int)) {
-                Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
+                Piece piece = board[vector2Int.x, vector2Int.y];
                 if (piece == null) list.Add(vector2Int);
             }
 
@@ -36,16 +36,16 @@ namespace Script.Pieces {
             if (!hasMoved) {
                 Vector2Int forward = new Vector2Int(X - 2 * ColorMultiplier, Y);
                 if (IsInBoard(forward)) {
-                    Piece pieceForward = _dataManager.board[forward.x, forward.y];
-                    Piece pieceFront = _dataManager.board[forward.x - 1, forward.y];
+                    Piece pieceForward =board[forward.x, forward.y];
+                    Piece pieceFront = board[forward.x - 1, forward.y];
                     if (pieceForward == null && pieceFront == null) list.Add(forward);
                 }
             }
 
             // Eat Right
-            Vector2Int eatRight = new Vector2Int(X + ColorMultiplier, Y + 1);
+            Vector2Int eatRight = new Vector2Int(X - ColorMultiplier, Y + 1);
             if (IsInBoard(eatRight)) {
-                Piece rightTarget = _dataManager.board[eatRight.x, eatRight.y];
+                Piece rightTarget = board[eatRight.x, eatRight.y];
                 if (rightTarget != null) {
                     if (rightTarget.ColorMultiplier != ColorMultiplier) {
                         list.Add(eatRight);
@@ -54,9 +54,9 @@ namespace Script.Pieces {
             }
 
             // Eat Left
-            Vector2Int eatleft = new Vector2Int(X + ColorMultiplier, Y - 1);
+            Vector2Int eatleft = new Vector2Int(X - ColorMultiplier, Y - 1);
             if (IsInBoard(eatleft)) {
-                Piece leftTarget = _dataManager.board[eatleft.x, eatleft.y];
+                Piece leftTarget = board[eatleft.x, eatleft.y];
                 if (leftTarget != null) {
                     if (leftTarget.ColorMultiplier != ColorMultiplier) {
                         list.Add(eatleft);

@@ -62,7 +62,7 @@ namespace Script.Managers {
         private void Test() {
             if (Input.GetButtonDown("Fire1")) {
                 if (isYourTurn) {
-                    MiniMax(_dataManager.board, 2);
+                    MiniMax(_dataManager.board, 1);
                     NewBoard = Move(_dataManager.board, BestPiece, BestMove);
                     isYourTurn = !isYourTurn;
                 }
@@ -76,7 +76,7 @@ namespace Script.Managers {
             int j = piece.Coordinate.y;
             
             Piece target = board[vector2Int.x, vector2Int.y];
-            if(target != null) Kill(target);
+            if(target != null) Kill(board, target);
             board[vector2Int.x, vector2Int.y] = piece;
             board[i, j] = null;
             newBoard = board;
@@ -92,7 +92,9 @@ namespace Script.Managers {
             int j = piece.Coordinate.y;
             
             Piece target = board[vector2Int.x, vector2Int.y];
-            if(target != null) Kill(target);
+            if (target != null) {
+                if(target.ColorMultiplier != piece.ColorMultiplier) Kill(board, target);
+            }
             board[vector2Int.x, vector2Int.y] = piece;
             board[i, j] = null;
             return board;
@@ -123,12 +125,12 @@ namespace Script.Managers {
             }
         }*/
 
-      private void ChooseTheBestMove(Piece [,] board) {
+      /*private void ChooseTheBestMove(Piece [,] board) {
           Vector2Int bestMove;
           int index;
           if (isYourTurn) index = MiniMax(board, 1);
 
-      }
+      }*/
       
       private int MiniMax(Piece[,] board, int depth) {
           int value = 0;
@@ -169,7 +171,7 @@ namespace Script.Managers {
               foreach (Piece piece in board) {
                   if(piece == null) continue;
                   Vector2Int position = new Vector2Int(piece.Coordinate.x, piece.Coordinate.y);
-                  List<Vector2Int> move = piece.AvailableMove();
+                  List<Vector2Int> move = piece.AvailableMove(board);
                   foreach (Vector2Int vector2Int in move) {
                       int value = 0;
                       bool wasATargetHere = false;
@@ -209,11 +211,11 @@ namespace Script.Managers {
                 switch (team) {
                     case Team.White:
                         value += VARIABLE.IdPiece * 10;
-                        value += VARIABLE.AvailableMove().Count * VARIABLE.ColorMultiplier;
+                        value += VARIABLE.AvailableMove(board).Count * VARIABLE.ColorMultiplier;
                         break;
                     case Team.Black:
                         value -= VARIABLE.IdPiece * 10;
-                        value -= VARIABLE.AvailableMove().Count * VARIABLE.ColorMultiplier;
+                        value -= VARIABLE.AvailableMove(board).Count * VARIABLE.ColorMultiplier;
                         break;
                 }
             }
@@ -258,12 +260,12 @@ namespace Script.Managers {
             return value;
         }
 
-        private void Kill(Piece piece) {
+        private void Kill(Piece[,] board, Piece piece) {
             if (team == Team.White) _score += piece.IdPiece;
             if (team == Team.Black) _score -= piece.IdPiece;
             if (_myPiece.Contains(piece)) _myPiece.Remove(piece);
             if (_opponentPiece.Contains(piece)) _opponentPiece.Remove(piece);
-            _dataManager.board[piece.Coordinate.x, piece.Coordinate.y] = null;
+            board[piece.Coordinate.x, piece.Coordinate.y] = null;
         }
 
         private int GetTypeOfPiece(Piece piece) {
