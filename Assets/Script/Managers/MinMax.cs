@@ -14,8 +14,9 @@ namespace Script.Managers {
         private List<Piece> _opponentPiece = new List<Piece>();
         public bool isYourTurn;
         public Button CurrentTurn;
+        public static bool WhiteHasPlayed, BLackHasPlayed;
         public TextMeshProUGUI Text;
-        private bool isWhite = true, isMaximizing = true, gameOver;
+        private bool isWhite = true, isMaximizing = true, gameOver, isMaximizingNode, startTimer;
         private int _score;
         public int Depth;
         private int teamMultiplier;
@@ -24,6 +25,7 @@ namespace Script.Managers {
         private DataManager _dataManager => DataManager.Instance;
         private Vector2Int BestMove = new Vector2Int();
         private Piece BestPiece;
+        private float timer;
 
         public enum Team {
             White,
@@ -56,16 +58,28 @@ namespace Script.Managers {
         private void Update() {
             CurrentTurn.image.color = isWhite ? Color.white : Color.black;
             Text.color = isWhite ? Color.black : Color.white;
-            Test();
+            startTimer = isYourTurn;
+            if (startTimer) timer += Time.deltaTime;
+            if (timer >= 2f) {
+                Play();
+                startTimer = false;
+                timer = 0;
+            }
         }
 
-        private void Test() {
+        /*private void Test() {
             if (Input.GetButtonDown("Fire1")) {
-                if (isYourTurn) {
-                    MiniMax(_dataManager.board, 1);
-                    NewBoard = Move(_dataManager.board, BestPiece, BestMove);
-                }
+                Play();
             }
+        }*/
+        
+        private void Play() {
+            WhiteHasPlayed = false;
+            BLackHasPlayed = false;
+            MiniMax(_dataManager.board, 2);
+                NewBoard = Move(_dataManager.board, BestPiece, BestMove);
+                if (team == Team.White) WhiteHasPlayed = true;
+                if (team == Team.Black) BLackHasPlayed = true;
         }
 
         
@@ -167,7 +181,65 @@ namespace Script.Managers {
           if (depth > 0) {
               List<List<Piece[,]>> tree = new List<List<Piece[,]>>();
               List<Piece[,]> Actions = new List<Piece[,]>();
-              foreach (Piece piece in board) {
+              isMaximizingNode = depth % 2 != 0;
+              if (isMaximizingNode) {
+                  foreach (Piece piece in _myPiece) {
+                      if(piece == null) continue;
+                      Vector2Int position = new Vector2Int(piece.Coordinate.x, piece.Coordinate.y);
+                      List<Vector2Int> move = piece.AvailableMove(board);
+                      foreach (Vector2Int vector2Int in move) {
+                          int value = 0;
+                          bool wasATargetHere = false;
+                          Piece cible = null;
+                          if (board[vector2Int.x, vector2Int.y] != null) { 
+                              wasATargetHere = true;
+                              cible = board[vector2Int.x, vector2Int.y];
+                          }
+                          Piece[,] Node = new Piece[8,8];
+                          Array.Copy(board, Node, 64);
+                          Node = TheoricMove(Node, piece, vector2Int);
+                          value = EvaluateBoard(Node);
+                          if (piece.ColorMultiplier == teamMultiplier) {
+                              if (value > maxValue) {
+                                  maxValue = value;
+                                  BestMove = vector2Int;
+                                  BestPiece = piece;
+                              }
+                          }
+                          Actions.Add(Node);
+                      }
+                  }
+              }
+              else {
+                  foreach (Piece piece in _opponentPiece) {
+                      if(piece == null) continue;
+                      Vector2Int position = new Vector2Int(piece.Coordinate.x, piece.Coordinate.y);
+                      List<Vector2Int> move = piece.AvailableMove(board);
+                      foreach (Vector2Int vector2Int in move) {
+                          int value = 0;
+                          bool wasATargetHere = false;
+                          Piece cible = null;
+                          if (board[vector2Int.x, vector2Int.y] != null) { 
+                              wasATargetHere = true;
+                              cible = board[vector2Int.x, vector2Int.y];
+                          }
+                          Piece[,] Node = new Piece[8,8];
+                          Array.Copy(board, Node, 64);
+                          Node = TheoricMove(Node, piece, vector2Int);
+                          value = EvaluateBoard(Node);
+                          if (piece.ColorMultiplier == teamMultiplier) {
+                              if (value > maxValue) {
+                                  maxValue = value;
+                                  BestMove = vector2Int;
+                                  BestPiece = piece;
+                              }
+                          }
+                          Actions.Add(Node);
+                      }
+                  }
+              }
+              
+              /*foreach (Piece piece in board) {
                   if(piece == null) continue;
                   Vector2Int position = new Vector2Int(piece.Coordinate.x, piece.Coordinate.y);
                   List<Vector2Int> move = piece.AvailableMove(board);
@@ -192,7 +264,7 @@ namespace Script.Managers {
                       }
                       Actions.Add(Node);
                   }
-              }
+              }*/
               tree.Add(Actions);
               depth--;
               foreach (var possibilité in Actions) {
@@ -251,24 +323,12 @@ namespace Script.Managers {
             return MyMove;
         }*/
 
-        private int GetValue(Vector2Int vector2Int) {
-            int value = 0;
-            if (_dataManager.board[vector2Int.x, vector2Int.y] == null) return value;  
-            Piece piece = _dataManager.board[vector2Int.x, vector2Int.y];
-            value = GetTypeOfPiece(piece);
-            return value;
-        }
-
         private void Kill(Piece[,] board, Piece piece) {
             if (team == Team.White) _score += piece.IdPiece;
             if (team == Team.Black) _score -= piece.IdPiece;
             if (_myPiece.Contains(piece)) _myPiece.Remove(piece);
             if (_opponentPiece.Contains(piece)) _opponentPiece.Remove(piece);
             board[piece.Coordinate.x, piece.Coordinate.y] = null;
-        }
-
-        private int GetTypeOfPiece(Piece piece) {
-            return piece.IdPiece;
         }
     }
 }
