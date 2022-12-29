@@ -30,7 +30,7 @@ namespace Script.Managers {
         }
 
         private void Update() {
-            if (Input.GetButtonDown("Fire1")) {
+            if (MinMax.WhiteHasPlayed || MinMax.BLackHasPlayed) {
                 DestroyPieces();
                 board = MinMax.NewBoard;
                 DisplayPieces(board);
