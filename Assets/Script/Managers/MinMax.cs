@@ -16,7 +16,7 @@ namespace Script.Managers {
         public Button CurrentTurn;
         public static bool WhiteHasPlayed, BLackHasPlayed;
         public TextMeshProUGUI Text;
-        private bool isWhite = true, isMaximizing = true, gameOver, isMaximizingNode, startTimer;
+        private bool isWhite = true, isMaximizing = true, gameOver, isMaximizingNode, startTimer, isPair;
         private int _score;
         public int Depth;
         private int teamMultiplier;
@@ -36,6 +36,7 @@ namespace Script.Managers {
             isYourTurn = team == Team.White;
             BestMove = new Vector2Int();
             BestPiece = null;
+            isPair = Depth % 2 == 0;
             foreach (Piece piece in _dataManager.board) {
                 if(piece == null) continue;
                 switch (piece.ColorMultiplier) {
@@ -76,7 +77,7 @@ namespace Script.Managers {
         private void Play() {
             WhiteHasPlayed = false;
             BLackHasPlayed = false;
-            MiniMax(_dataManager.board, 2);
+            MiniMax(_dataManager.board, Depth);
                 NewBoard = Move(_dataManager.board, BestPiece, BestMove);
                 if (team == Team.White) WhiteHasPlayed = true;
                 if (team == Team.Black) BLackHasPlayed = true;
@@ -181,7 +182,10 @@ namespace Script.Managers {
           if (depth > 0) {
               List<List<Piece[,]>> tree = new List<List<Piece[,]>>();
               List<Piece[,]> Actions = new List<Piece[,]>();
-              isMaximizingNode = depth % 2 != 0;
+              if(isPair) isMaximizingNode = depth % 2 == 0;
+              else {
+                  isMaximizingNode = depth % 2 != 0;
+              }
               if (isMaximizingNode) {
                   foreach (Piece piece in _myPiece) {
                       if(piece == null) continue;
