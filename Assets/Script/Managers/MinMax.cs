@@ -179,6 +179,7 @@ namespace Script.Managers {
       private List<List<Piece[,]>> GetNodes(Piece[,] board, int depth) {
           List<List<Piece[,]>> Tree = new List<List<Piece[,]>>();
           int maxValue = -99999;
+          int minValue = 99999;
           if (depth > 0) {
               List<List<Piece[,]>> tree = new List<List<Piece[,]>>();
               List<Piece[,]> Actions = new List<Piece[,]>();
@@ -189,7 +190,14 @@ namespace Script.Managers {
               if (isMaximizingNode) {
                   foreach (Piece piece in _myPiece) {
                       if(piece == null) continue;
-                      Vector2Int position = new Vector2Int(piece.Coordinate.x, piece.Coordinate.y);
+                      Vector2Int position = new Vector2Int();
+                      for (int i = 0; i < 8; i++) {
+                          for (int j = 0; j < 8; j++) {
+                              if (board[i, j] == piece)
+                                  position = new Vector2Int(i,j);
+                          }
+                      }
+                      
                       List<Vector2Int> move = piece.AvailableMove(board);
                       foreach (Vector2Int vector2Int in move) {
                           int value = 0;
@@ -203,21 +211,26 @@ namespace Script.Managers {
                           Array.Copy(board, Node, 64);
                           Node = TheoricMove(Node, piece, vector2Int);
                           value = EvaluateBoard(Node);
-                          if (piece.ColorMultiplier == teamMultiplier) {
-                              if (value > maxValue) {
-                                  maxValue = value;
+                          if (value > maxValue) {
+                              maxValue = value;
                                   BestMove = vector2Int;
                                   BestPiece = piece;
-                              }
                           }
                           Actions.Add(Node);
+                          board = CancelMove(Node, piece, position, wasATargetHere, cible);
                       }
                   }
               }
               else {
                   foreach (Piece piece in _opponentPiece) {
                       if(piece == null) continue;
-                      Vector2Int position = new Vector2Int(piece.Coordinate.x, piece.Coordinate.y);
+                      Vector2Int position = new Vector2Int();
+                      for (int i = 0; i < 8; i++) {
+                          for (int j = 0; j < 8; j++) {
+                              if (board[i, j] == piece)
+                                  position = new Vector2Int(i,j);
+                          }
+                      }
                       List<Vector2Int> move = piece.AvailableMove(board);
                       foreach (Vector2Int vector2Int in move) {
                           int value = 0;
@@ -231,14 +244,13 @@ namespace Script.Managers {
                           Array.Copy(board, Node, 64);
                           Node = TheoricMove(Node, piece, vector2Int);
                           value = EvaluateBoard(Node);
-                          if (piece.ColorMultiplier == teamMultiplier) {
-                              if (value > maxValue) {
-                                  maxValue = value;
-                                  BestMove = vector2Int;
-                                  BestPiece = piece;
-                              }
+                          if (value < minValue) {
+                              maxValue = value;
+                              BestMove = vector2Int;
+                              BestPiece = piece;
                           }
                           Actions.Add(Node);
+                          board = CancelMove(Node, piece, position, wasATargetHere, cible);
                       }
                   }
               }
