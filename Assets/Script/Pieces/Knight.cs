@@ -18,6 +18,7 @@ namespace Script.Pieces {
         public override List<Vector2Int> AvailableMove(Piece[,] board) {
             List<Vector2Int> list = new List<Vector2Int>();
             Board = board;
+            if (Coordinate.x < 0) return list;
             
             // X1, Y2
             Vector2Int X1Y2 = new Vector2Int(X + 1, Y + 2);

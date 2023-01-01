@@ -107,7 +107,7 @@ namespace Script.Managers {
             
             Piece target = board[vector2Int.x, vector2Int.y];
             if (target != null) {
-                if(target.ColorMultiplier != piece.ColorMultiplier) Kill(board, target);
+                if(target.ColorMultiplier != piece.ColorMultiplier) TheoricKill(board, target);
             }
             board[vector2Int.x, vector2Int.y] = piece;
             board[i, j] = null;
@@ -189,16 +189,11 @@ namespace Script.Managers {
               }
               if (isMaximizingNode) {
                   foreach (Piece piece in _myPiece) {
-                      if(piece == null) continue;
-                      Vector2Int position = new Vector2Int();
-                      for (int i = 0; i < 8; i++) {
-                          for (int j = 0; j < 8; j++) {
-                              if (board[i, j] == piece)
-                                  position = new Vector2Int(i,j);
-                          }
-                      }
-                      
                       List<Vector2Int> move = piece.AvailableMove(board);
+                      if(!IsInBoard(piece)) continue;
+                      Vector2Int position = new Vector2Int();
+                      position.x = piece.Coordinate.x;
+                      position.y = piece.Coordinate.y;
                       foreach (Vector2Int vector2Int in move) {
                           int value = 0;
                           bool wasATargetHere = false;
@@ -223,6 +218,7 @@ namespace Script.Managers {
               }
               else {
                   foreach (Piece piece in _opponentPiece) {
+                      if(!IsInBoard(piece)) continue;
                       if(piece == null) continue;
                       Vector2Int position = new Vector2Int();
                       for (int i = 0; i < 8; i++) {
@@ -339,11 +335,21 @@ namespace Script.Managers {
             return MyMove;
         }*/
 
+        private bool IsInBoard(Piece piece) {
+            return piece.Coordinate.x >= 0 && piece.Coordinate.x <= 7 && piece.Coordinate.y >= 0 &&
+                   piece.Coordinate.y <= 7;
+        }
+
         private void Kill(Piece[,] board, Piece piece) {
             if (team == Team.White) _score += piece.IdPiece;
             if (team == Team.Black) _score -= piece.IdPiece;
             if (_myPiece.Contains(piece)) _myPiece.Remove(piece);
             if (_opponentPiece.Contains(piece)) _opponentPiece.Remove(piece);
+            board[piece.Coordinate.x, piece.Coordinate.y] = null;
+        }
+        private void TheoricKill(Piece[,] board, Piece piece) {
+            if (team == Team.White) _score += piece.IdPiece;
+            if (team == Team.Black) _score -= piece.IdPiece;
             board[piece.Coordinate.x, piece.Coordinate.y] = null;
         }
     }

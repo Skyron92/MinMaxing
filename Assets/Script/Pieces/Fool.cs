@@ -14,6 +14,7 @@ namespace Script.Pieces {
         public override List<Vector2Int> AvailableMove(Piece[,] board) {
             Board = board;
             List<Vector2Int> list = new List<Vector2Int>();
+            if (Coordinate.x < 0) return list;
             list.AddRange(DiagonalMove);
             return list;
         }
