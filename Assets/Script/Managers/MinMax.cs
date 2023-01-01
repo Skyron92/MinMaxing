@@ -16,7 +16,7 @@ namespace Script.Managers {
         public Button CurrentTurn;
         public static bool WhiteHasPlayed, BLackHasPlayed;
         public TextMeshProUGUI Text;
-        private bool isWhite = true, isMaximizing = true, gameOver, isMaximizingNode, startTimer, isPair;
+        private bool isWhite = true, isMaximizing = true, gameOver, isMaximizingNode, startTimer;
         private int _score;
         public int Depth;
         private int teamMultiplier;
@@ -36,7 +36,6 @@ namespace Script.Managers {
             isYourTurn = team == Team.White;
             BestMove = new Vector2Int();
             BestPiece = null;
-            isPair = Depth % 2 == 0;
             foreach (Piece piece in _dataManager.board) {
                 if(piece == null) continue;
                 switch (piece.ColorMultiplier) {
@@ -148,7 +147,7 @@ namespace Script.Managers {
       
       private int MiniMax(Piece[,] board, int depth) {
           int value = 0;
-          List<List<Piece[,]>> Tree = GetNodes(board, depth);
+          List<List<Piece[,]>> Tree = GetNodes(board, depth, true);
           for (int i = depth - 1; i < Tree.Count; i++) {
               if (isMaximizing) {
                   value = -50000;
@@ -176,17 +175,14 @@ namespace Script.Managers {
           return value;
       }
 
-      private List<List<Piece[,]>> GetNodes(Piece[,] board, int depth) {
+      private List<List<Piece[,]>> GetNodes(Piece[,] board, int depth, bool isMaximizing) {
           List<List<Piece[,]>> Tree = new List<List<Piece[,]>>();
           int maxValue = -99999;
           int minValue = 99999;
           if (depth > 0) {
               List<List<Piece[,]>> tree = new List<List<Piece[,]>>();
               List<Piece[,]> Actions = new List<Piece[,]>();
-              if(isPair) isMaximizingNode = depth % 2 == 0;
-              else {
-                  isMaximizingNode = depth % 2 != 0;
-              }
+              isMaximizingNode = isMaximizing;
               if (isMaximizingNode) {
                   foreach (Piece piece in _myPiece) {
                       List<Vector2Int> move = piece.AvailableMove(board);
@@ -279,8 +275,9 @@ namespace Script.Managers {
               }*/
               tree.Add(Actions);
               depth--;
+              isMaximizingNode = !isMaximizingNode;
               foreach (var possibilité in Actions) {
-                  GetNodes(possibilité, depth);
+                  GetNodes(possibilité, depth, isMaximizingNode);
               }
               Tree = tree;
           }
