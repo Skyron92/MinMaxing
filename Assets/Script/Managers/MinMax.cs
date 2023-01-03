@@ -42,11 +42,6 @@ namespace Script.Managers {
                     case 1 when team == Team.White:
                     case -1 when team == Team.Black:
                         _myPiece.Add(piece);
-                        break;
-                }
-                switch (piece.ColorMultiplier) {
-                    case -1 when team == Team.White:
-                    case 1 when team == Team.Black:
                         _opponentPiece.Add(piece);
                         break;
                 }
@@ -67,12 +62,6 @@ namespace Script.Managers {
             }
         }
 
-        /*private void Test() {
-            if (Input.GetButtonDown("Fire1")) {
-                Play();
-            }
-        }*/
-        
         private void Play() {
             WhiteHasPlayed = false;
             BLackHasPlayed = false;
