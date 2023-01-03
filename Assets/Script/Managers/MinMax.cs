@@ -46,7 +46,7 @@ namespace Script.Managers {
                         break;
                 }
                 if (team == Team.Black) teamMultiplier = -1;
-                if (team == Team.White) {teamMultiplier = 1;}
+                if (team == Team.White) teamMultiplier = 1;
             }
         }
 
@@ -65,7 +65,7 @@ namespace Script.Managers {
         private void Play() {
             WhiteHasPlayed = false;
             BLackHasPlayed = false;
-            //MiniMax(_dataManager.board, Depth);
+            MiniMax(_dataManager.board, Depth);
             GetNodes(_dataManager.board, Depth, isMaximizingNode);
             NewBoard = Move(_dataManager.board, BestPiece, BestMove);
             if (team == Team.White) WhiteHasPlayed = true;
@@ -133,7 +133,7 @@ namespace Script.Managers {
 
       }*/
       
-      /*private int MiniMax(Piece[,] board, int depth) {
+      private int MiniMax(Piece[,] board, int depth) {
           int value = 0;
           List<List<Piece[,]>> Tree = GetNodes(board, depth, true);
           for (int i = depth - 1; i < Tree.Count; i++) {
@@ -161,7 +161,7 @@ namespace Script.Managers {
               }
           } 
           return value;
-      }*/
+      }
 
       private List<List<Piece[,]>> GetNodes(Piece[,] board, int depth, bool isMaximizing) {
           List<List<Piece[,]>> Tree = new List<List<Piece[,]>>();
