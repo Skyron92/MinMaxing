@@ -19,7 +19,6 @@ namespace Script.Pieces {
             list.AddRange(RightMoves);
             list.AddRange(LeftMoves);
             list.AddRange(DiagonalMove);
-            MoveCount = list.Count;
             return list;
         }
     

@@ -16,7 +16,6 @@ namespace Script.Pieces {
             List<Vector2Int> list = new List<Vector2Int>();
             if (Coordinate.x < 0) return list;
             list.AddRange(DiagonalMove);
-            MoveCount = list.Count;
             return list;
         }
     

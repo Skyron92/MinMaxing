@@ -115,7 +115,7 @@ namespace Script.Pieces {
                     list.Add(x2Y1);
                 }
             }
-            MoveCount = list.Count;
+
             return list;
         }
     }

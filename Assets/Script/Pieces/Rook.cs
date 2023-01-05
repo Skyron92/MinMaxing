@@ -18,7 +18,6 @@ namespace Script.Pieces {
             list.AddRange(YMoves);
             list.AddRange(RightMoves);
             list.AddRange(LeftMoves);
-            MoveCount = list.Count;
             return list;
         }
     }
