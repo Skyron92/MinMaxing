@@ -46,7 +46,7 @@ namespace Script.Managers {
                         break;
                 }
                 if (team == Team.Black) teamMultiplier = -1;
-                if (team == Team.White) {teamMultiplier = 1;}
+                if (team == Team.White) teamMultiplier = 1;
             }
         }
 
@@ -66,14 +66,14 @@ namespace Script.Managers {
             WhiteHasPlayed = false;
             BLackHasPlayed = false;
             MiniMax(_dataManager.board, Depth);
-                NewBoard = Move(_dataManager.board, BestPiece, BestMove);
-                if (team == Team.White) WhiteHasPlayed = true;
-                if (team == Team.Black) BLackHasPlayed = true;
+            GetNodes(_dataManager.board, Depth, isMaximizingNode);
+            NewBoard = Move(_dataManager.board, BestPiece, BestMove);
+            if (team == Team.White) WhiteHasPlayed = true;
+            if (team == Team.Black) BLackHasPlayed = true;
         }
 
         
         private Piece[,] Move(Piece[,] board, Piece piece, Vector2Int vector2Int) {
-            Piece[,] newBoard = new Piece[8, 8];
             int i = piece.Coordinate.x;
             int j = piece.Coordinate.y;
             
@@ -81,12 +81,11 @@ namespace Script.Managers {
             if(target != null) Kill(board, target);
             board[vector2Int.x, vector2Int.y] = piece;
             board[i, j] = null;
-            newBoard = board;
             //_dataManager.DisplayPieces(board);
             Opponent.isYourTurn = isYourTurn;
             isYourTurn = !isYourTurn;
             isWhite = !isWhite;
-            return newBoard;
+            return board;
         }
         
         private Piece[,] TheoricMove(Piece[,] board, Piece piece, Vector2Int vector2Int) {
@@ -289,39 +288,9 @@ namespace Script.Managers {
                 }
             }
             return value;
-        }
+      }
 
-        /*private Vector2Int Evaluation(Piece[,] currentBoard, int depth) {
-            Vector2Int BestMove = new Vector2Int();
-            Vector2Int MyMove = new Vector2Int();
-            int currentScore = _score;
-            for (int i = depth; i >= 0; i--) {
-                foreach (Piece piece in _dataManager.board) {
-                    foreach (Vector2Int vector2Int in piece.AvailableMove()) {
-                        Piece target = _dataManager.board[vector2Int.x, vector2Int.y];
-                        if (target == null) continue;
-                        bool isWhitePiece = target.ColorMultiplier == 1;
-                        switch (isWhitePiece) {
-                            case true when team == Team.Black:
-                            case false when team == Team.White:
-                                Kill(target);
-                                break;
-                        }
-
-                        currentScore += GetValue(vector2Int);
-                        if (currentScore > _score) {
-                            BestMove = vector2Int;
-                        }
-
-                        MyMove = BestMove;
-                        currentScore = _score;
-                    }
-                }
-            }
-            return MyMove;
-        }*/
-
-        private bool IsInBoard(Piece piece) {
+      private bool IsInBoard(Piece piece) {
             return piece.Coordinate.x >= 0 && piece.Coordinate.x <= 7 && piece.Coordinate.y >= 0 &&
                    piece.Coordinate.y <= 7;
         }
