@@ -66,7 +66,6 @@ namespace Script.Managers {
             WhiteHasPlayed = false;
             BLackHasPlayed = false;
             MiniMax(_dataManager.board, Depth);
-            GetNodes(_dataManager.board, Depth, isMaximizingNode);
             NewBoard = Move(_dataManager.board, BestPiece, BestMove);
             if (team == Team.White) WhiteHasPlayed = true;
             if (team == Team.Black) BLackHasPlayed = true;
