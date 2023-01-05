@@ -75,7 +75,7 @@ namespace Script.Pieces {
                 Piece pieceTL = board[topLeft.x, topLeft.y];
                 if (pieceTL == null) list.Add(topLeft);
             }
-
+            MoveCount = list.Count;
             return list;
         }
     

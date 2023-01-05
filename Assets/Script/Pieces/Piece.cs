@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Script.Managers;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +8,7 @@ namespace Script.Pieces {
         public int ColorMultiplier;
         protected int TypeOfPiece;
         public int IdPiece;
+        public int MoveCount;
         protected Image sprite;
 
         private DataManager _dataManager => DataManager.Instance;

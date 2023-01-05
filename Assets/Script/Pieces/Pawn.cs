@@ -65,7 +65,7 @@ namespace Script.Pieces {
                     }
                 }
             }
-
+            MoveCount = list.Count;
             return list;
         }
     }
