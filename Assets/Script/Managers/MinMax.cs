@@ -279,11 +279,11 @@ namespace Script.Managers {
                 switch (team) {
                     case Team.White:
                         value += VARIABLE.IdPiece * 10;
-                        value += VARIABLE.AvailableMove(board).Count * VARIABLE.ColorMultiplier;
+                        value += VARIABLE.MoveCount * VARIABLE.ColorMultiplier;
                         break;
                     case Team.Black:
                         value -= VARIABLE.IdPiece * 10;
-                        value -= VARIABLE.AvailableMove(board).Count * VARIABLE.ColorMultiplier;
+                        value -= VARIABLE.MoveCount * VARIABLE.ColorMultiplier;
                         break;
                 }
             }
