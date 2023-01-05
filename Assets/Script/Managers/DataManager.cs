@@ -5,10 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Script.Managers {
-    public class DataManager : MonoBehaviour
-    {
-        private Canvas fdes;
-
+    public class DataManager : MonoBehaviour {
         public bool UseTestingBoard;
         public Transform BoardTransform;
         public Transform PiecesTransform;
@@ -17,7 +14,6 @@ namespace Script.Managers {
         public Sprite WhiteRook, WhiteKnight, WhiteFool, WhiteQueen, WhiteKing, WhitePawn;
         public Sprite BlackRook, BlackKnight, BlackFool, BlackQueen, BlackKing, BlackPawn;
         public List<GameObject> sprites = new List<GameObject>();
-
         public Piece[,] board = new Piece[8, 8];
         public static DataManager Instance = new DataManager();
 
@@ -68,7 +64,7 @@ namespace Script.Managers {
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null }, 
-                {null, new Knight(1), null, null, null, null, new Knight(1), null }
+                {null, new Rook(1), null, null, null, null, new King(-1), null }
                 
             };
         }
@@ -80,15 +76,6 @@ namespace Script.Managers {
                     Instantiate((i + j) % 2 == 0 ? WhiteSquarePrefab : BlackSquarePrefab, BoardTransform);
                 }
             }
-
-            /*/ Instantiate Pieces
-            for (int i = 0; i < board.GetLength(0); i++) {
-                for (int j = 0; j < board.GetLength(1); j++) {
-                    Piece piece = board[i, j];
-                    GameObject instantiate = Instantiate(PiecePrefab, PiecesTransform);
-                    instantiate.GetComponent<Image>().sprite = GetSprite(piece);
-                }
-            }*/
         }
 
         private void AttributeType() {

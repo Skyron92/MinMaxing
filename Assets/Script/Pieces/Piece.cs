@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Script.Managers;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,18 +8,27 @@ namespace Script.Pieces {
         public int ColorMultiplier;
         protected int TypeOfPiece;
         public int IdPiece;
+        public int CanKillKingCounter;
         protected Image sprite;
+        public bool canKillKing;
 
         private DataManager _dataManager => DataManager.Instance;
 
-        public Piece[,] Board = new Piece[8, 8];
+        public Piece[,] Board;
 
         public Vector2Int Coordinate {
             get {
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) {
-                        if (Board[i, j] == this)
-                            return new Vector2Int(i, j);
+                        if (Board != null) {
+                            if (Board[i, j] == this)
+                                return new Vector2Int(i, j);
+                        }
+                        else {
+                            if (_dataManager.board[i, j] == this)
+                                return new Vector2Int(i, j);
+                        }
+                        
                     }
                 }
                 return -Vector2Int.one;
@@ -32,6 +40,7 @@ namespace Script.Pieces {
         
         public List<Vector2Int> YMoves {
             get {
+                
                 // Right Move
                 List<Vector2Int> vector2Ints = new List<Vector2Int>();
                 for (int i = X + 1; i <= 7; i++) {
@@ -42,6 +51,10 @@ namespace Script.Pieces {
                             break;
                         }
                         vector2Ints.Add(vector2Int);
+                        if (piece.IdPiece == 150 * -ColorMultiplier) {
+                            canKillKing = true;
+                            CanKillKingCounter++;
+                        }
                         break;
                     }
                     vector2Ints.Add(vector2Int);
@@ -55,6 +68,10 @@ namespace Script.Pieces {
                             break;
                         }
                         vector2Ints.Add(vector2Int);
+                        if (piece.IdPiece == 150 * -ColorMultiplier) {
+                            canKillKing = true;
+                            CanKillKingCounter++;
+                        }
                         break;
                     }
                     vector2Ints.Add(vector2Int);
@@ -76,6 +93,10 @@ namespace Script.Pieces {
                             break;
                         }
                         vector2Ints.Add(vector2Int);
+                        if (piece.IdPiece == 150 * -ColorMultiplier) {
+                            canKillKing = true;
+                            CanKillKingCounter++;
+                        }
                         break;
                     }
                     vector2Ints.Add(vector2Int);
@@ -96,11 +117,14 @@ namespace Script.Pieces {
                             break;
                         }
                         vector2Ints.Add(vector2Int); 
+                        if (piece.IdPiece == 150 * -ColorMultiplier) {
+                            canKillKing = true;
+                            CanKillKingCounter++;
+                        }
                         break;
                     }
                     vector2Ints.Add(vector2Int);
                 }
-
                 return vector2Ints;
             }
         }
@@ -117,6 +141,10 @@ namespace Script.Pieces {
                                 break;
                             }
                             vector2Ints.Add(vector2Int);
+                            if (piece.IdPiece == 150 * -ColorMultiplier) {
+                                canKillKing = true;
+                                CanKillKingCounter++;
+                            }
                             break;
                         }
                         vector2Ints.Add(vector2Int);
@@ -130,6 +158,10 @@ namespace Script.Pieces {
                                 break;
                             }
                             vector2Ints.Add(vector2Int);
+                            if (piece.IdPiece == 150 * -ColorMultiplier) {
+                                canKillKing = true;
+                                CanKillKingCounter++;
+                            }
                             break;
                         }
                         vector2Ints.Add(vector2Int);
@@ -143,6 +175,10 @@ namespace Script.Pieces {
                                 break;
                             }
                             vector2Ints.Add(vector2Int);
+                            if (piece.IdPiece == 150 * -ColorMultiplier) {
+                                canKillKing = true;
+                                CanKillKingCounter++;
+                            }
                             break;
                         }
                         vector2Ints.Add(vector2Int);
@@ -157,6 +193,10 @@ namespace Script.Pieces {
                                 break;
                             }
                             vector2Ints.Add(vector2Int);
+                            if (piece.IdPiece == 150 * -ColorMultiplier) {
+                                canKillKing = true;
+                                CanKillKingCounter++;
+                            }
                             break;
                         }
                         vector2Ints.Add(vector2Int);
@@ -167,11 +207,6 @@ namespace Script.Pieces {
 
         protected Piece(int colorMultiplier) {
             ColorMultiplier = colorMultiplier;
-        }
-
-        public Piece GetPiece(Vector2Int vector2Int) {
-            Piece piece = Board[vector2Int.x, vector2Int.y];
-            return piece;
         }
 
         public abstract List<Vector2Int> AvailableMove(Piece[,] board);

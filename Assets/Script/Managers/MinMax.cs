@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Script.Pieces;
 using TMPro;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,7 @@ namespace Script.Managers {
         public TextMeshProUGUI Text;
         private bool isWhite = true, isMaximizing = true, gameOver, isMaximizingNode, startTimer;
         public int Depth;
+        private bool check, checkmate;
         private int _score;
         public static Piece[,] NewBoard = new Piece[8, 8]; 
         private DataManager _dataManager => DataManager.Instance;
@@ -77,9 +79,10 @@ namespace Script.Managers {
             board[i, j] = null;
             return board;
         }
+       
         private void TheoricKill(Piece[,] board, Piece piece) {
             if (PlayerColorMultiplier == 1) _score += piece.IdPiece;
-            if (PlayerColorMultiplier == 1) _score -= piece.IdPiece;
+            if (PlayerColorMultiplier == -1) _score -= piece.IdPiece;
             board[piece.Coordinate.x, piece.Coordinate.y] = null;
         }
 
@@ -124,7 +127,7 @@ namespace Script.Managers {
             foreach (Piece piece in board) {
                 if (piece == null) continue;
                 if (piece.ColorMultiplier != colorMultiplier) continue;
-                foreach (Vector2Int move in piece.AvailableMove(board)) {
+                    foreach (Vector2Int move in piece.AvailableMove(board)) {
                     Piece[,] boardCopy = new Piece[8, 8];
                     Array.Copy(board, boardCopy, 64);
                     TheoricMove(boardCopy, piece, move);
@@ -142,10 +145,14 @@ namespace Script.Managers {
                     case 1:
                         value += piece.IdPiece * 10;
                         value += piece.AvailableMove(board).Count * piece.ColorMultiplier;
+                        if (piece.canKillKing && piece.ColorMultiplier == -1) value -= 200; 
+                        if (piece.canKillKing && piece.ColorMultiplier == 1) value += 200; 
                         break;
                     case -1:
                         value -= piece.IdPiece * 10;
                         value -= piece.AvailableMove(board).Count * piece.ColorMultiplier;
+                        if (piece.canKillKing && piece.ColorMultiplier == -1) value += 200; 
+                        if (piece.canKillKing && piece.ColorMultiplier == 1) value -= 200; 
                         break;
                 }
             }
@@ -155,6 +162,17 @@ namespace Script.Managers {
         private bool IsTerminal(Piece[,] board, bool maximizingPlayer) {
             return _myPiece.Count == 0;
         }
+
+        private bool isInCheck(Piece[,] board, int colorMultiplier) {
+            int count = 0;
+            foreach (Piece piece in board) {
+                if(piece.ColorMultiplier == colorMultiplier) continue;
+                count += piece.CanKillKingCounter;
+            }
+            return count != 0;
+        }
+        
+        
 
         /* Ancienne Version
         private int MiniMax(Piece[,] board, int depth) {

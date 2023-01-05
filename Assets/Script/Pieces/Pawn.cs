@@ -51,6 +51,10 @@ namespace Script.Pieces {
                 if (rightTarget != null) {
                     if (rightTarget.ColorMultiplier != ColorMultiplier) {
                         list.Add(eatRight);
+                        if (rightTarget.IdPiece == 150 * -ColorMultiplier) {
+                            canKillKing = true;
+                            CanKillKingCounter++;
+                        }
                     }
                 }
             }
@@ -62,10 +66,13 @@ namespace Script.Pieces {
                 if (leftTarget != null) {
                     if (leftTarget.ColorMultiplier != ColorMultiplier) {
                         list.Add(eatleft);
+                        if (leftTarget.IdPiece == 150 * -ColorMultiplier) {
+                            canKillKing = true;
+                            CanKillKingCounter++;
+                        }
                     }
                 }
             }
-
             return list;
         }
     }
