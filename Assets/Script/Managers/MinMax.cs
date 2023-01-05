@@ -260,6 +260,7 @@ namespace Script.Managers {
                       Actions.Add(Node);
                   }
               }*/
+              
               tree.Add(Actions);
               depth--;
               isMaximizingNode = !isMaximizingNode;
@@ -273,16 +274,16 @@ namespace Script.Managers {
 
       private int EvaluateBoard(Piece[,] board) {
             int value = 0;
-            foreach (var VARIABLE in board) {
-                if (VARIABLE == null) continue;
+            foreach (var piece in board) {
+                if (piece == null) continue;
                 switch (team) {
                     case Team.White:
-                        value += VARIABLE.IdPiece * 10;
-                        value += VARIABLE.AvailableMove(board).Count * VARIABLE.ColorMultiplier;
+                        value += piece.IdPiece * 10;
+                        value += piece.AvailableMove(board).Count * piece.ColorMultiplier;
                         break;
                     case Team.Black:
-                        value -= VARIABLE.IdPiece * 10;
-                        value -= VARIABLE.AvailableMove(board).Count * VARIABLE.ColorMultiplier;
+                        value -= piece.IdPiece * 10;
+                        value -= piece.AvailableMove(board).Count * piece.ColorMultiplier;
                         break;
                 }
             }
