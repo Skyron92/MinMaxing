@@ -65,7 +65,7 @@ namespace Script.Managers {
         private void Play() {
             WhiteHasPlayed = false;
             BLackHasPlayed = false;
-            //MiniMax(_dataManager.board, Depth);
+            MiniMax(_dataManager.board, Depth);
             GetNodes(_dataManager.board, Depth, isMaximizingNode);
             NewBoard = Move(_dataManager.board, BestPiece, BestMove);
             if (team == Team.White) WhiteHasPlayed = true;
@@ -133,7 +133,7 @@ namespace Script.Managers {
 
       }*/
       
-      /*private int MiniMax(Piece[,] board, int depth) {
+      private int MiniMax(Piece[,] board, int depth) {
           int value = 0;
           List<List<Piece[,]>> Tree = GetNodes(board, depth, true);
           for (int i = depth - 1; i < Tree.Count; i++) {
@@ -161,7 +161,7 @@ namespace Script.Managers {
               }
           } 
           return value;
-      }*/
+      }
 
       private List<List<Piece[,]>> GetNodes(Piece[,] board, int depth, bool isMaximizing) {
           List<List<Piece[,]>> Tree = new List<List<Piece[,]>>();
@@ -261,7 +261,6 @@ namespace Script.Managers {
                       Actions.Add(Node);
                   }
               }*/
-              
               tree.Add(Actions);
               depth--;
               isMaximizingNode = !isMaximizingNode;
@@ -275,16 +274,16 @@ namespace Script.Managers {
 
       private int EvaluateBoard(Piece[,] board) {
             int value = 0;
-            foreach (var piece in board) {
-                if (piece == null) continue;
+            foreach (var VARIABLE in board) {
+                if (VARIABLE == null) continue;
                 switch (team) {
                     case Team.White:
-                        value += piece.IdPiece * 10;
-                        value += piece.MoveCount * piece.ColorMultiplier;
+                        value += VARIABLE.IdPiece * 10;
+                        value += VARIABLE.AvailableMove(board).Count * VARIABLE.ColorMultiplier;
                         break;
                     case Team.Black:
-                        value -= piece.IdPiece * 10;
-                        value -= piece.MoveCount * piece.ColorMultiplier;
+                        value -= VARIABLE.IdPiece * 10;
+                        value -= VARIABLE.AvailableMove(board).Count * VARIABLE.ColorMultiplier;
                         break;
                 }
             }
