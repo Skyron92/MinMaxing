@@ -8,47 +8,38 @@ using UnityEngine.UI;
 
 namespace Script.Managers {
     public class MinMax : MonoBehaviour {
-        [SerializeField] public Team team;
-        [SerializeField] public MinMax Opponent;
+        [SerializeField] public int PlayerColorMultiplier;
         private List<Piece> _myPiece = new List<Piece>();
+        [SerializeField] public MinMax Opponent;
         private List<Piece> _opponentPiece = new List<Piece>();
         public bool isYourTurn;
         public Button CurrentTurn;
         public static bool WhiteHasPlayed, BLackHasPlayed;
         public TextMeshProUGUI Text;
         private bool isWhite = true, isMaximizing = true, gameOver, isMaximizingNode, startTimer;
-        private int _score;
         public int Depth;
-        private int teamMultiplier;
-        private Piece[,] MyNode = new Piece[8, 8];
-        public static Piece[,] NewBoard = new Piece[8, 8];
+        private int _score;
+        public static Piece[,] NewBoard = new Piece[8, 8]; 
         private DataManager _dataManager => DataManager.Instance;
-        private Vector2Int BestMove = new Vector2Int();
-        private Piece BestPiece;
         private float timer;
 
-        public enum Team {
-            White,
-            Black
-        }
-
         private void Start() {
-            isYourTurn = team == Team.White;
-            BestMove = new Vector2Int();
-            BestPiece = null;
+            isYourTurn = PlayerColorMultiplier == 1;
             foreach (Piece piece in _dataManager.board) {
                 if (piece == null) continue;
                 switch (piece.ColorMultiplier) {
-                    case 1 when team == Team.White:
-                    case -1 when team == Team.Black:
+                    case 1 when PlayerColorMultiplier == 1:
                         _myPiece.Add(piece);
+                        break;
+                    case -1 when PlayerColorMultiplier == -1:
+                        _myPiece.Add(piece);
+                        break;
+                    case 1 when PlayerColorMultiplier == -1:
                         _opponentPiece.Add(piece);
                         break;
-                }
-
-                if (team == Team.Black) teamMultiplier = -1;
-                if (team == Team.White) {
-                    teamMultiplier = 1;
+                    case -1 when PlayerColorMultiplier == 1:
+                        _opponentPiece.Add(piece);
+                        break;
                 }
             }
         }
@@ -68,29 +59,12 @@ namespace Script.Managers {
         private void Play() {
             WhiteHasPlayed = false;
             BLackHasPlayed = false;
-            MiniMax(_dataManager.board, Depth);
-            //GetNodes(_dataManager.board, Depth, isMaximizingNode);
-            NewBoard = Move(_dataManager.board, BestPiece, BestMove);
-            if (team == Team.White) WhiteHasPlayed = true;
-            if (team == Team.Black) BLackHasPlayed = true;
-        }
-
-
-        private Piece[,] Move(Piece[,] board, Piece piece, Vector2Int vector2Int) {
-            Piece[,] newBoard = new Piece[8, 8];
-            int i = piece.Coordinate.x;
-            int j = piece.Coordinate.y;
-
-            Piece target = board[vector2Int.x, vector2Int.y];
-            if (target != null) Kill(board, target);
-            board[vector2Int.x, vector2Int.y] = piece;
-            board[i, j] = null;
-            newBoard = board;
-
+            Think(_dataManager.board, PlayerColorMultiplier);
+            if (PlayerColorMultiplier == 1) WhiteHasPlayed = true;
+            if (PlayerColorMultiplier == -1) BLackHasPlayed = true;
             Opponent.isYourTurn = isYourTurn;
             isYourTurn = !isYourTurn;
             isWhite = !isWhite;
-            return newBoard;
         }
 
         private Piece[,] TheoricMove(Piece[,] board, Piece piece, Vector2Int vector2Int) {
@@ -103,44 +77,17 @@ namespace Script.Managers {
             board[i, j] = null;
             return board;
         }
-
-        private Piece[,] CancelMove(Piece[,] board, Piece piece, Vector2Int vector2Int, bool wasATargetHere,
-            Piece cible) {
-            int i = piece.Coordinate.x;
-            int j = piece.Coordinate.y;
-            board[vector2Int.x, vector2Int.y] = piece;
-            if (wasATargetHere && cible != null) board[i, j] = cible;
-            else {
-                board[i, j] = null;
-            }
-
-            return board;
+        private void TheoricKill(Piece[,] board, Piece piece) {
+            if (PlayerColorMultiplier == 1) _score += piece.IdPiece;
+            if (PlayerColorMultiplier == 1) _score -= piece.IdPiece;
+            board[piece.Coordinate.x, piece.Coordinate.y] = null;
         }
 
-        /*  private void Minimax(Piece[,] board, int depth, Team team) {
-            if (gameOver || depth < 0) return;
-            Piece[,] move = new Piece[8,8];
-            Piece[,] bestMove = new Piece[8,8];
-            foreach (var list in GetNodes(board, depth)) {
-                foreach (var plateau in list) {
-                    EvaluateBoard(plateau);
-                    if (isMaximizing) {
-                        int maxEval;
-                    }
-                }
-            }
-        }*/
-
-        /*private void ChooseTheBestMove(Piece [,] board) {
-          Vector2Int bestMove;
-          int index;
-          if (isYourTurn) index = MiniMax(board, 1);
-
-        }*/
+       
 
         private void Think(Piece[,] board, int colorMultiplier) {
             int oldValue = int.MinValue;
-            Piece[,] bestBoard;
+            Piece[,] bestBoard = new Piece[8,8];
             foreach (Piece[,] child in BoardChild(board, colorMultiplier)) {
                 int newValue = TheTrueMinMax(child, 2, false, colorMultiplier);
                 if (newValue > oldValue) {
@@ -148,8 +95,7 @@ namespace Script.Managers {
                     bestBoard = child;
                 }
             }
-            // Play bestboard
-            // bestBoard...
+            NewBoard = bestBoard;
         }
 
         private int TheTrueMinMax(Piece[,] board, int depth, bool maximizingPlayer, int colorMultiplier) {
@@ -185,18 +131,32 @@ namespace Script.Managers {
                     boards.Add(boardCopy);
                 }
             }
-
             return boards;
         }
 
         private int EvaluateBoard(Piece[,] board, bool maximizingPlayer) {
-            throw new NotImplementedException();
+            int value = 0;
+            foreach (var piece in board) {
+                if (piece == null) continue;
+                switch (PlayerColorMultiplier) {
+                    case 1:
+                        value += piece.IdPiece * 10;
+                        value += piece.AvailableMove(board).Count * piece.ColorMultiplier;
+                        break;
+                    case -1:
+                        value -= piece.IdPiece * 10;
+                        value -= piece.AvailableMove(board).Count * piece.ColorMultiplier;
+                        break;
+                }
+            }
+            return value;
         }
         
         private bool IsTerminal(Piece[,] board, bool maximizingPlayer) {
-            throw new NotImplementedException();
+            return _myPiece.Count == 0;
         }
 
+        /* Ancienne Version
         private int MiniMax(Piece[,] board, int depth) {
             int value = 0;
             List<List<Piece[,]>> Tree = GetNodes(board, depth, true);
@@ -209,7 +169,6 @@ namespace Script.Managers {
                             value = index;
                         }
                     }
-
                     depth--;
                     isMaximizing = !isMaximizing;
                 }
@@ -320,45 +279,24 @@ namespace Script.Managers {
             return Tree;
         }
 
-        private int AlphaBeta(Piece[,] board, int currentDepth, bool isMaximizing, int a, int b) {
-            int v = 0;
-            if (currentDepth <= 1) return v;
-            else {
-                if (!isMaximizing) {
-                    v = 9999;
-                    if (a >= v) {
-                        return v;
-                    }
-                }
-                else {
-                    v = -9999;
-                    if (v >= b) {
-                        return v;
-                    }
-                }
-            }
-
-            return v;
-        }
-
-        private int EvaluateBoard(Piece[,] board) {
-            int value = 0;
-            foreach (var piece in board) {
-                if (piece == null) continue;
-                switch (team) {
-                    case Team.White:
-                        value += piece.IdPiece * 10;
-                        value += piece.AvailableMove(board).Count * piece.ColorMultiplier;
-                        break;
-                    case Team.Black:
-                        value -= piece.IdPiece * 10;
-                        value -= piece.AvailableMove(board).Count * piece.ColorMultiplier;
-                        break;
-                }
-            }
-
-            return value;
-        }
+        /* private int EvaluateBoard(Piece[,] board) {
+             int value = 0;
+             foreach (var piece in board) {
+                 if (piece == null) continue;
+                 switch (team) {
+                     case Team.White:
+                         value += piece.IdPiece * 10;
+                         value += piece.AvailableMove(board).Count * piece.ColorMultiplier;
+                         break;
+                     case Team.Black:
+                         value -= piece.IdPiece * 10;
+                         value -= piece.AvailableMove(board).Count * piece.ColorMultiplier;
+                         break;
+                 }
+             }
+ 
+             return value;
+         }
 
         private bool IsInBoard(Piece piece) {
             return piece.Coordinate.x >= 0 && piece.Coordinate.x <= 7 && piece.Coordinate.y >= 0 &&
@@ -366,17 +304,62 @@ namespace Script.Managers {
         }
 
         private void Kill(Piece[,] board, Piece piece) {
-            if (team == Team.White) _score += piece.IdPiece;
-            if (team == Team.Black) _score -= piece.IdPiece;
+            if (PlayerColorMultiplier == 1) _score += piece.IdPiece;
+            if (PlayerColorMultiplier == -1) _score -= piece.IdPiece;
             if (_myPiece.Contains(piece)) _myPiece.Remove(piece);
             if (_opponentPiece.Contains(piece)) _opponentPiece.Remove(piece);
             board[piece.Coordinate.x, piece.Coordinate.y] = null;
         }
 
-        private void TheoricKill(Piece[,] board, Piece piece) {
-            if (team == Team.White) _score += piece.IdPiece;
-            if (team == Team.Black) _score -= piece.IdPiece;
-            board[piece.Coordinate.x, piece.Coordinate.y] = null;
+        private Piece[,] CancelMove(Piece[,] board, Piece piece, Vector2Int vector2Int, bool wasATargetHere,
+           Piece cible) {
+           int i = piece.Coordinate.x;
+           int j = piece.Coordinate.y;
+           board[vector2Int.x, vector2Int.y] = piece;
+           if (wasATargetHere && cible != null) board[i, j] = cible;
+           else {
+               board[i, j] = null;
+           }
+
+           return board;
+       }
+
+        private void Minimax(Piece[,] board, int depth, Team team) {
+            if (gameOver || depth < 0) return;
+            Piece[,] move = new Piece[8,8];
+            Piece[,] bestMove = new Piece[8,8];
+            foreach (var list in GetNodes(board, depth)) {
+                foreach (var plateau in list) {
+                    EvaluateBoard(plateau);
+                    if (isMaximizing) {
+                        int maxEval;
+                    }
+                }
+            }
         }
+
+        private void ChooseTheBestMove(Piece [,] board) {
+          Vector2Int bestMove;
+          int index;
+          if (isYourTurn) index = MiniMax(board, 1);
+
+        }
+        
+        private Piece[,] Move(Piece[,] board, Piece piece, Vector2Int vector2Int) {
+            Piece[,] newBoard = new Piece[8, 8];
+            int i = piece.Coordinate.x;
+            int j = piece.Coordinate.y;
+
+            Piece target = board[vector2Int.x, vector2Int.y];
+            if (target != null) Kill(board, target);
+            board[vector2Int.x, vector2Int.y] = piece;
+            board[i, j] = null;
+            newBoard = board;
+
+            Opponent.isYourTurn = isYourTurn;
+            isYourTurn = !isYourTurn;
+            isWhite = !isWhite;
+            return newBoard;
+        }*/
     }
 }

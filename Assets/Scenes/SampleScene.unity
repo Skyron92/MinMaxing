@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a0f2e243ca4cc3a808520eb438e00a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 1
+  PlayerColorMultiplier: -1
   Opponent: {fileID: 614268299}
   isYourTurn: 0
   CurrentTurn: {fileID: 1196668281}
@@ -450,7 +450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36a0f2e243ca4cc3a808520eb438e00a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 0
+  PlayerColorMultiplier: 1
   Opponent: {fileID: 403663629}
   isYourTurn: 0
   CurrentTurn: {fileID: 1196668281}
