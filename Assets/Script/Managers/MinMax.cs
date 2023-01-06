@@ -103,7 +103,7 @@ namespace Script.Managers {
 
         private int TheTrueMinMax(Piece[,] board, int depth, bool maximizingPlayer, int colorMultiplier) {
             int value;
-            if (depth == 0 || IsTerminal(board, maximizingPlayer))
+            if (depth == 0 || IsTerminal(board, colorMultiplier))
                 return EvaluateBoard(board, maximizingPlayer);
             // Maximization
             if (maximizingPlayer) {
@@ -159,11 +159,15 @@ namespace Script.Managers {
             return value;
         }
         
-        private bool IsTerminal(Piece[,] board, bool maximizingPlayer) {
-            return _myPiece.Count == 0;
+        private bool IsTerminal(Piece[,] board, int colorMultiplier) {
+            return IsInCheckMate(board, colorMultiplier);
         }
 
-        private bool isInCheck(Piece[,] board, int colorMultiplier) {
+        private bool IsInCheckMate(Piece[,] board, int colorMultiplier) {
+            return IsInCheck(board, colorMultiplier);
+        }
+
+        private bool IsInCheck(Piece[,] board, int colorMultiplier) {
             int count = 0;
             foreach (Piece piece in board) {
                 if(piece.ColorMultiplier == colorMultiplier) continue;
@@ -171,6 +175,13 @@ namespace Script.Managers {
             }
             return count != 0;
         }
+
+        private void ProtectTheKing(Piece[,] board, int colorMultiplier) {
+            if (IsInCheck(board, colorMultiplier)) {
+                //On veut que                     
+            }
+        }
+        
         
         
 
