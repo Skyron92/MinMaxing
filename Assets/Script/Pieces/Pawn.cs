@@ -10,10 +10,9 @@ namespace Script.Pieces {
 
         public Pawn(int colorMultiplier) : base(colorMultiplier) { }
 
-        public override List<Vector2Int> AvailableMove(Piece[,] board) {
+        public override IEnumerable<Vector2Int> AvailableMove(Piece[,] board) {
             var list = new List<Vector2Int>();
             Board = board;
-            if (Coordinate.x < 0) return list;
             if (ColorMultiplier == 1) {
                 if (Coordinate.x == 6) hasMoved = false;
                 else {
@@ -31,7 +30,7 @@ namespace Script.Pieces {
             Vector2Int vector2Int = new Vector2Int(X - ColorMultiplier, Y);
             if (IsInBoard(vector2Int)) {
                 Piece piece = board[vector2Int.x, vector2Int.y];
-                if (piece == null) list.Add(vector2Int);
+                if (piece == null) yield return vector2Int;
             }
 
             //Double Forward Move
@@ -65,7 +64,6 @@ namespace Script.Pieces {
                     }
                 }
             }
-            return list;
         }
     }
 }

@@ -175,7 +175,7 @@ namespace Script.Pieces {
             ColorMultiplier = colorMultiplier;
         }
 
-        public abstract List<Vector2Int> AvailableMove(Piece[,] board);
+        public abstract IEnumerable<Vector2Int> AvailableMove(Piece[,] board);
 
         public bool IsInBoard(Vector2Int vector2Int) {
             return vector2Int.x >= 0 && vector2Int.x <= 7 && vector2Int.y >= 0 && vector2Int.y <= 7;

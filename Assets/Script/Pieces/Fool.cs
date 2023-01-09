@@ -6,7 +6,7 @@ namespace Script.Pieces {
     
         public Fool(int colorMultiplier) : base(colorMultiplier) { }
 
-        public override List<Vector2Int> AvailableMove(Piece[,] board) {
+        public override IEnumerable<Vector2Int> AvailableMove(Piece[,] board) {
             Board = board;
             List<Vector2Int> list = new List<Vector2Int>();
             if (Coordinate.x < 0) return list;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Script.Pieces;
 using TMPro;
 using UnityEngine;
@@ -56,7 +57,7 @@ namespace Script.Managers {
             Text.color = isWhite ? Color.black : Color.white;
             startTimer = isYourTurn;
             if (startTimer) timer += Time.deltaTime;
-            if (timer >= 2f) {
+            if (timer >= 2f && Input.GetButtonDown("Jump")) {
                 Play();
                 startTimer = false;
                 timer = 0;
@@ -130,23 +131,17 @@ namespace Script.Managers {
             return value;
         }
 
-        private List<Piece[,]> BoardChild(Piece[,] board, int colorMultiplier) {
-            List<Piece[,]> boards = new List<Piece[,]>();
+        private IEnumerable<Piece[,]> BoardChild(Piece[,] board, int colorMultiplier) {
             foreach (Piece piece in board) {
                 if (piece == null) continue;
                 if (piece.ColorMultiplier != colorMultiplier) continue;
                     foreach (Vector2Int move in piece.AvailableMove(board)) {
-                    Piece[,] boardCopy = new Piece[8, 8];
-                    Array.Copy(board, boardCopy, 64);
-                    TheoricMove(boardCopy, piece, move);
-                    if (!IsInCheck(boardCopy, colorMultiplier)) boards.Add(boardCopy);
+                        Piece[,] boardCopy = new Piece[8, 8];
+                        Array.Copy(board, boardCopy, 64);
+                        TheoricMove(boardCopy, piece, move);
+                        if (!IsInCheck(boardCopy, colorMultiplier)) yield return boardCopy;
                     }
             }
-            if (boards.Count == 0) checkmate = true;
-            else {
-                checkmate = false;
-            }
-            return boards;
         }
 
         private int EvaluateBoard(Piece[,] board) {
@@ -156,11 +151,11 @@ namespace Script.Managers {
                 switch (PlayerColorMultiplier) {
                     case 1:
                         value += piece.IdPiece * 10;
-                        value += piece.AvailableMove(board).Count * piece.ColorMultiplier;
+                        //value += piece.AvailableMove(board).ToList().Count * piece.ColorMultiplier;
                         break;
                     case -1:
                         value -= piece.IdPiece * 10;
-                        value -= piece.AvailableMove(board).Count * piece.ColorMultiplier;
+                        //value -= piece.AvailableMove(board).ToList().Count * piece.ColorMultiplier;
                         break;
                 }
             }

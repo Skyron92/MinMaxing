@@ -6,7 +6,7 @@ namespace Script.Pieces {
 
         public Rook(int colorMultiplier) : base(colorMultiplier) { }
 
-        public override List<Vector2Int> AvailableMove(Piece[,] board) {
+        public override IEnumerable<Vector2Int> AvailableMove(Piece[,] board) {
             var list = new List<Vector2Int>();
             Board = board;
             if (Coordinate.x < 0) return list;
