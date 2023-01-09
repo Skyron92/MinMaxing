@@ -24,6 +24,10 @@ namespace Script.Managers {
         public static Piece[,] NewBoard = new Piece[8, 8]; 
         private DataManager _dataManager => DataManager.Instance;
         private float timer;
+        public bool useAlphabêta;
+
+        private int a = int.MinValue;
+        private int b = int.MaxValue;
 
         private void Start() {
             isYourTurn = PlayerColorMultiplier == 1;
@@ -92,7 +96,11 @@ namespace Script.Managers {
             int oldValue = int.MinValue;
             Piece[,] bestBoard = new Piece[8,8];
             foreach (Piece[,] child in BoardChild(board, colorMultiplier)) {
-                int newValue = TheTrueMinMax(child, 2, false, colorMultiplier);
+                int newValue = 0;
+                if(!useAlphabêta) newValue =TheTrueMinMax(child, 2, false, colorMultiplier);
+                else {
+                    newValue = Alphabeta(child, a, b, colorMultiplier, 3, false);
+                }
                 if (newValue > oldValue) {
                     oldValue = newValue;
                     bestBoard = child;
@@ -104,7 +112,7 @@ namespace Script.Managers {
         private int TheTrueMinMax(Piece[,] board, int depth, bool maximizingPlayer, int colorMultiplier) {
             int value;
             if (depth == 0 || IsTerminal(board, colorMultiplier))
-                return EvaluateBoard(board, maximizingPlayer);
+                return EvaluateBoard(board);
             // Maximization
             if (maximizingPlayer) {
                 value = int.MinValue;
@@ -132,12 +140,12 @@ namespace Script.Managers {
                     Array.Copy(board, boardCopy, 64);
                     TheoricMove(boardCopy, piece, move);
                     boards.Add(boardCopy);
-                }
+                    }
             }
             return boards;
         }
 
-        private int EvaluateBoard(Piece[,] board, bool maximizingPlayer) {
+        private int EvaluateBoard(Piece[,] board) {
             int value = 0;
             foreach (var piece in board) {
                 if (piece == null) continue;
@@ -164,25 +172,51 @@ namespace Script.Managers {
         }
 
         private bool IsInCheckMate(Piece[,] board, int colorMultiplier) {
-            return IsInCheck(board, colorMultiplier);
+            return IsInCheck(board, colorMultiplier) ;
         }
 
         private bool IsInCheck(Piece[,] board, int colorMultiplier) {
-            int count = 0;
-            foreach (Piece piece in board) {
-                if(piece.ColorMultiplier == colorMultiplier) continue;
-                count += piece.CanKillKingCounter;
-            }
-            return count != 0;
-        }
-
-        private void ProtectTheKing(Piece[,] board, int colorMultiplier) {
-            if (IsInCheck(board, colorMultiplier)) {
-                //On veut que                     
-            }
+            bool isInCheck = false;
+            /*for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (board != null) {
+                        if (board[i, j].GetType() == typeof(King) && (board[i, j].ColorMultiplier == colorMultiplier))
+                            isInCheck = false;
+                    }
+                }
+            }*/
+            return isInCheck;
         }
         
-        
+        private int Alphabeta(Piece[,] board, int a, int b, int playerColorMultiplier, int depth, bool isMaximizing) {
+            int value = 0;
+            if (IsTerminal(board, playerColorMultiplier) || depth == 0)
+                return EvaluateBoard(board);
+            else {
+                if (!isMaximizing) {
+                    value = int.MaxValue;
+                    foreach (var minChild in BoardChild(board, playerColorMultiplier)) {
+                        value = Mathf.Min(value, Alphabeta(minChild, a, b, playerColorMultiplier, depth - 1, isMaximizing));
+                        if (a >= value) {
+                            return value;
+                            b = Mathf.Min(b, value);
+                        }
+                    }
+                }
+                else {
+                    value = int.MaxValue;
+                    foreach (var maxChild in BoardChild(board, playerColorMultiplier)) {
+                        value = Mathf.Max(value,
+                            Alphabeta(maxChild, a, b, playerColorMultiplier, depth - 1, isMaximizing));
+                        if (value >= b) {
+                            return value;
+                            a = Mathf.Max(a, value);
+                        }
+                    }
+                }
+            }
+            return value;
+        } 
         
 
         /* Ancienne Version
