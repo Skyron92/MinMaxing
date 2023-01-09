@@ -172,7 +172,7 @@ MonoBehaviour:
   isYourTurn: 0
   CurrentTurn: {fileID: 1196668281}
   Text: {fileID: 614912817}
-  Depth: 2
+  Depth: 3
   "useAlphab\xEAta": 1
 --- !u!1 &417859324
 GameObject:
@@ -456,7 +456,7 @@ MonoBehaviour:
   isYourTurn: 0
   CurrentTurn: {fileID: 1196668281}
   Text: {fileID: 614912817}
-  Depth: 2
+  Depth: 3
   "useAlphab\xEAta": 1
 --- !u!1 &614912815
 GameObject:

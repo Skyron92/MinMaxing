@@ -26,9 +26,9 @@ namespace Script.Managers {
         }
 
         private void Update() {
-            if (MinMax.WhiteHasPlayed || MinMax.BLackHasPlayed) {
+            if (AIBrain.WhiteHasPlayed || AIBrain.BLackHasPlayed) {
                 DestroyPieces();
-                board = MinMax.NewBoard;
+                board = AIBrain.NewBoard;
                 DisplayPieces(board);
             }
         }
