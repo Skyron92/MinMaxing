@@ -26,7 +26,7 @@ namespace Script.Managers {
         }
 
         private void Update() {
-            if (AIBrain.WhiteHasPlayed || AIBrain.BLackHasPlayed) {
+            if (AIBrain.HasPlayed) {
                 DestroyPieces();
                 board = AIBrain.NewBoard;
                 DisplayPieces(board);

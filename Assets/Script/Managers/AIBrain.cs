@@ -11,20 +11,18 @@ using Debug = UnityEngine.Debug;
 namespace Script.Managers {
     public class AIBrain : MonoBehaviour {
         [SerializeField] public int PlayerColorMultiplier;
-        private List<Piece> _myPiece = new List<Piece>();
         [SerializeField] public AIBrain Opponent;
-        private List<Piece> _opponentPiece = new List<Piece>();
         public bool isYourTurn;
         public Button CurrentTurn;
-        public static bool WhiteHasPlayed, BLackHasPlayed;
+        public static bool HasPlayed;
         public TextMeshProUGUI Text;
-        private bool isWhite = true, isMaximizing = true, gameOver, isMaximizingNode, startTimer;
+        private bool isWhite = true, isMaximizing = true;
         public int Depth;
-        private bool check, checkmate;
+        private bool checkmate;
         public static Piece[,] NewBoard = new Piece[8, 8]; 
         private DataManager _dataManager => DataManager.Instance;
         private float timer;
-        public bool useAlphabêta;
+        public bool useNegaMax;
         private Stopwatch _stopwatch = new Stopwatch();
 
         private int a = int.MinValue;
@@ -32,44 +30,23 @@ namespace Script.Managers {
 
         private void Start() {
             isYourTurn = PlayerColorMultiplier == 1;
-            foreach (Piece piece in _dataManager.board) {
-                if (piece == null) continue;
-                switch (piece.ColorMultiplier) {
-                    case 1 when PlayerColorMultiplier == 1:
-                        _myPiece.Add(piece);
-                        break;
-                    case -1 when PlayerColorMultiplier == -1:
-                        _myPiece.Add(piece);
-                        break;
-                    case 1 when PlayerColorMultiplier == -1:
-                        _opponentPiece.Add(piece);
-                        break;
-                    case -1 when PlayerColorMultiplier == 1:
-                        _opponentPiece.Add(piece);
-                        break;
-                }
-            }
         }
 
         private void Update() {
             CurrentTurn.image.color = isWhite ? Color.white : Color.black;
             Text.color = isWhite ? Color.black : Color.white;
-            startTimer = isYourTurn;
-            if (startTimer) timer += Time.deltaTime;
+            if (isYourTurn) timer += Time.deltaTime;
             if (timer >= 2f) {
                 Play();
-                startTimer = false;
-                timer = 0;
+                timer = 0; 
             }
         }
 
         private void Play() {
             _stopwatch.Start();
-            WhiteHasPlayed = false;
-            BLackHasPlayed = false;
+            HasPlayed = false;
             Think(_dataManager.board, PlayerColorMultiplier);
-            if (PlayerColorMultiplier == 1) WhiteHasPlayed = true;
-            if (PlayerColorMultiplier == -1) BLackHasPlayed = true;
+            HasPlayed = true;
             Opponent.isYourTurn = isYourTurn;
             isYourTurn = !isYourTurn;
             isWhite = !isWhite;
@@ -78,13 +55,9 @@ namespace Script.Managers {
         }
 
         private Piece[,] TheoricMove(Piece[,] board, Piece piece, Vector2Int vector2Int) {
-            int i = piece.Coordinate.x;
-            int j = piece.Coordinate.y;
-
-            Piece target = board[vector2Int.x, vector2Int.y];
-            if (target != null) TheoricKill(board, target);
+            if (board[vector2Int.x, vector2Int.y] != null) TheoricKill(board, board[vector2Int.x, vector2Int.y]);
             board[vector2Int.x, vector2Int.y] = piece;
-            board[i, j] = null;
+            board[piece.Coordinate.x, piece.Coordinate.y] = null;
             return board;
         }
        
@@ -94,19 +67,16 @@ namespace Script.Managers {
 
         private void Think(Piece[,] board, int colorMultiplier) {
             int oldValue = int.MinValue;
-            Piece[,] bestBoard = new Piece[8,8];
             foreach (Piece[,] child in BoardChild(board, colorMultiplier)) {
                 int newValue = 0;
-                if(!useAlphabêta) newValue = MinMax(child, Depth, false, colorMultiplier);
-                else {
-                    newValue = Alphabeta(child, a, b, colorMultiplier, Depth, false);
-                }
+                if(!useNegaMax) newValue = MinMax(child, Depth, false, colorMultiplier);
+                //else newValue = Alphabeta(child, a, b, colorMultiplier, Depth, false);
+                else newValue = NegaMax(child, a, b, colorMultiplier, Depth);
                 if (newValue > oldValue) {
                     oldValue = newValue;
-                    bestBoard = child;
+                    NewBoard = child;
                 }
             }
-            NewBoard = bestBoard;
         }
 
         private int MinMax(Piece[,] board, int depth, bool maximizingPlayer, int colorMultiplier) {
@@ -143,9 +113,7 @@ namespace Script.Managers {
                     }
             }
             if (boards.Count == 0) checkmate = true;
-            else {
-                checkmate = false;
-            }
+            else checkmate = false;
             return boards;
         }
 
@@ -190,27 +158,37 @@ namespace Script.Managers {
                 if (!isMaximizing) {
                     value = int.MaxValue;
                     foreach (var minChild in BoardChild(board, playerColorMultiplier)) {
-                        value = Mathf.Min(value, Alphabeta(minChild, a, b, playerColorMultiplier, depth - 1, isMaximizing));
-                        if (a >= value) {
-                            return value;
-                            b = Mathf.Min(b, value);
-                        }
+                        value = Mathf.Min(value, Alphabeta(minChild, a, b, playerColorMultiplier, depth - 1, true));
+                        if (a >= value) break;
+                        b = Mathf.Min(b, value);
                     }
                 }
                 else {
-                    value = int.MaxValue;
+                    value = int.MinValue;
                     foreach (var maxChild in BoardChild(board, playerColorMultiplier)) {
                         value = Mathf.Max(value,
-                            Alphabeta(maxChild, a, b, playerColorMultiplier, depth - 1, isMaximizing));
-                        if (value >= b) {
-                            return value;
-                            a = Mathf.Max(a, value);
-                        }
+                            Alphabeta(maxChild, a, b, playerColorMultiplier, depth - 1, false));
+                        if (value >= b) break;
+                        a = Mathf.Max(a, value);
                     }
                 }
             }
             return value;
         }
+        
+        private int NegaMax(Piece[,] board, int a, int b, int playerColorMultiplier, int depth) {
+            int value = 0;
+            if (IsTerminal(board, playerColorMultiplier) || depth == 0)
+                return playerColorMultiplier * EvaluateBoard(board);
+            value = int.MinValue;
+            foreach (var child in BoardChild(board, playerColorMultiplier)) {
+                value = Mathf.Max(value, -NegaMax(child, -a, -b, -playerColorMultiplier, depth - 1));
+                a = Mathf.Max(a, value);
+                if(a >= b) break;
+            }
+            return value;
+        }
+
         
         /* Ancienne Version
         private int MiniMax(Piece[,] board, int depth) {
