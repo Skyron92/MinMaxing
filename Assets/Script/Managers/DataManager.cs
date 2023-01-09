@@ -61,9 +61,9 @@ namespace Script.Managers {
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, new Rook(-1), new Rook(-1) },
                 { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, null, null }, 
+                { null, new Rook(-1), null, null, null, null, null, null }, 
                 {null, new Rook(-1), null, null, null, null, new King(1), null }
                 
             };
@@ -92,7 +92,7 @@ namespace Script.Managers {
                     piece.IdPiece = 10 * piece.ColorMultiplier;
                 }
                 if (type == typeof(King)) {
-                    piece.IdPiece = 150 * piece.ColorMultiplier;
+                    piece.IdPiece = int.MaxValue * piece.ColorMultiplier;
                 }
                 if (type == typeof(Pawn)) {
                     piece.IdPiece = 1 * piece.ColorMultiplier;

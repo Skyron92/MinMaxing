@@ -18,7 +18,6 @@ namespace Script.Pieces
             List<Vector2Int> list = new List<Vector2Int>();
             Board = board;
             if (Coordinate.x < 0) return list;
-            CanKillKingCounter = 0;
 
             // X1, Y2
             Vector2Int X1Y2 = new Vector2Int(X + 1, Y + 2);
@@ -27,10 +26,6 @@ namespace Script.Pieces
                 if (pieceX1Y2 != null) {
                     if (pieceX1Y2.ColorMultiplier != ColorMultiplier) {
                         list.Add(X1Y2);
-                        if (pieceX1Y2.IdPiece == 150 * -ColorMultiplier) {
-                            canKillKing = true;
-                            CanKillKingCounter++;
-                        }
                     }
                     else {
                         list.Add(X1Y2);
@@ -44,10 +39,6 @@ namespace Script.Pieces
                     if (piecex1Y2 != null) {
                         if (piecex1Y2.ColorMultiplier != ColorMultiplier) {
                             list.Add(x1Y2);
-                            if (piecex1Y2.IdPiece == 150 * -ColorMultiplier) {
-                                canKillKing = true;
-                                CanKillKingCounter++;
-                            }
                         }
                     }
                     else {
@@ -62,10 +53,6 @@ namespace Script.Pieces
                     if (pieceX1y2 != null) {
                         if (pieceX1y2.ColorMultiplier != ColorMultiplier) {
                             list.Add(X1y2);
-                            if (pieceX1y2.IdPiece == 150 * -ColorMultiplier) {
-                                canKillKing = true;
-                                CanKillKingCounter++;
-                            }
                         }
                     }
                     else {
@@ -80,10 +67,6 @@ namespace Script.Pieces
                     if (piecex1y2 != null) {
                         if (piecex1y2.ColorMultiplier != ColorMultiplier) {
                             list.Add(x1y2);
-                            if (piecex1y2.IdPiece == 150 * -ColorMultiplier) {
-                                canKillKing = true;
-                                CanKillKingCounter++;
-                            }
                         }
                     }
                     else {
@@ -98,10 +81,6 @@ namespace Script.Pieces
                     if (pieceX2Y1 != null) {
                         if (pieceX2Y1.ColorMultiplier != ColorMultiplier) {
                             list.Add(X2Y1);
-                            if (pieceX2Y1.IdPiece == 150 * -ColorMultiplier) {
-                                canKillKing = true;
-                                CanKillKingCounter++;
-                            }
                         }
                     }
                     else {
@@ -116,10 +95,6 @@ namespace Script.Pieces
                     if (pieceX2y1 != null) {
                         if (pieceX2y1.ColorMultiplier != ColorMultiplier) {
                             list.Add(X2y1);
-                            if (pieceX2y1.IdPiece == 150 * -ColorMultiplier) {
-                                canKillKing = true;
-                                CanKillKingCounter++;
-                            }
                         }
                     }
                     else {
@@ -134,10 +109,6 @@ namespace Script.Pieces
                     if (piecex2y1 != null) {
                         if (piecex2y1.ColorMultiplier != ColorMultiplier) {
                             list.Add(x2y1);
-                            if (piecex2y1.IdPiece == 150 * -ColorMultiplier) {
-                                canKillKing = true;
-                                CanKillKingCounter++;
-                            }
                         }
                     }
                     else {
@@ -152,10 +123,6 @@ namespace Script.Pieces
                     if (piecex2Y1 != null) {
                         if (piecex2Y1.ColorMultiplier != ColorMultiplier) {
                             list.Add(x2Y1);
-                            if (piecex2Y1.IdPiece == 150 * -ColorMultiplier) {
-                                canKillKing = true;
-                                CanKillKingCounter++;
-                            }
                         }
                     }
                     else
@@ -164,7 +131,6 @@ namespace Script.Pieces
                     }
                 }
             }
-            if (CanKillKingCounter == 0) canKillKing = false;
             return list;
         }
     }

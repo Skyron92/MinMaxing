@@ -8,9 +8,7 @@ namespace Script.Pieces {
         public int ColorMultiplier;
         protected int TypeOfPiece;
         public int IdPiece;
-        public int CanKillKingCounter;
         protected Image sprite;
-        public bool canKillKing;
 
         private DataManager _dataManager => DataManager.Instance;
 
@@ -51,10 +49,6 @@ namespace Script.Pieces {
                             break;
                         }
                         vector2Ints.Add(vector2Int);
-                        if (piece.IdPiece == 150 * -ColorMultiplier) {
-                            canKillKing = true;
-                            CanKillKingCounter++;
-                        }
                         break;
                     }
                     vector2Ints.Add(vector2Int);
@@ -68,10 +62,6 @@ namespace Script.Pieces {
                             break;
                         }
                         vector2Ints.Add(vector2Int);
-                        if (piece.IdPiece == 150 * -ColorMultiplier) {
-                            canKillKing = true;
-                            CanKillKingCounter++;
-                        }
                         break;
                     }
                     vector2Ints.Add(vector2Int);
@@ -93,10 +83,6 @@ namespace Script.Pieces {
                             break;
                         }
                         vector2Ints.Add(vector2Int);
-                        if (piece.IdPiece == 150 * -ColorMultiplier) {
-                            canKillKing = true;
-                            CanKillKingCounter++;
-                        }
                         break;
                     }
                     vector2Ints.Add(vector2Int);
@@ -116,11 +102,7 @@ namespace Script.Pieces {
                         if (piece.ColorMultiplier == ColorMultiplier) {
                             break;
                         }
-                        vector2Ints.Add(vector2Int); 
-                        if (piece.IdPiece == 150 * -ColorMultiplier) {
-                            canKillKing = true;
-                            CanKillKingCounter++;
-                        }
+                        vector2Ints.Add(vector2Int);
                         break;
                     }
                     vector2Ints.Add(vector2Int);
@@ -141,10 +123,6 @@ namespace Script.Pieces {
                                 break;
                             }
                             vector2Ints.Add(vector2Int);
-                            if (piece.IdPiece == 150 * -ColorMultiplier) {
-                                canKillKing = true;
-                                CanKillKingCounter++;
-                            }
                             break;
                         }
                         vector2Ints.Add(vector2Int);
@@ -158,10 +136,6 @@ namespace Script.Pieces {
                                 break;
                             }
                             vector2Ints.Add(vector2Int);
-                            if (piece.IdPiece == 150 * -ColorMultiplier) {
-                                canKillKing = true;
-                                CanKillKingCounter++;
-                            }
                             break;
                         }
                         vector2Ints.Add(vector2Int);
@@ -175,10 +149,6 @@ namespace Script.Pieces {
                                 break;
                             }
                             vector2Ints.Add(vector2Int);
-                            if (piece.IdPiece == 150 * -ColorMultiplier) {
-                                canKillKing = true;
-                                CanKillKingCounter++;
-                            }
                             break;
                         }
                         vector2Ints.Add(vector2Int);
@@ -193,10 +163,6 @@ namespace Script.Pieces {
                                 break;
                             }
                             vector2Ints.Add(vector2Int);
-                            if (piece.IdPiece == 150 * -ColorMultiplier) {
-                                canKillKing = true;
-                                CanKillKingCounter++;
-                            }
                             break;
                         }
                         vector2Ints.Add(vector2Int);

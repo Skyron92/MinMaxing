@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Script.Pieces;
 using TMPro;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -71,6 +70,7 @@ namespace Script.Managers {
             Opponent.isYourTurn = isYourTurn;
             isYourTurn = !isYourTurn;
             isWhite = !isWhite;
+            Debug.Log("Is in checkmate : " + checkmate);
         }
 
         private Piece[,] TheoricMove(Piece[,] board, Piece piece, Vector2Int vector2Int) {
@@ -97,9 +97,9 @@ namespace Script.Managers {
             Piece[,] bestBoard = new Piece[8,8];
             foreach (Piece[,] child in BoardChild(board, colorMultiplier)) {
                 int newValue = 0;
-                if(!useAlphabêta) newValue =TheTrueMinMax(child, 2, false, colorMultiplier);
+                if(!useAlphabêta) newValue =TheTrueMinMax(child, Depth, false, colorMultiplier);
                 else {
-                    newValue = Alphabeta(child, a, b, colorMultiplier, 3, false);
+                    newValue = Alphabeta(child, a, b, colorMultiplier, Depth, false);
                 }
                 if (newValue > oldValue) {
                     oldValue = newValue;
@@ -139,9 +139,10 @@ namespace Script.Managers {
                     Piece[,] boardCopy = new Piece[8, 8];
                     Array.Copy(board, boardCopy, 64);
                     TheoricMove(boardCopy, piece, move);
-                    boards.Add(boardCopy);
+                    if (!IsInCheck(boardCopy, colorMultiplier)) boards.Add(boardCopy);
                     }
             }
+            if (boards.Count == 0) checkmate = true;
             return boards;
         }
 
@@ -153,14 +154,10 @@ namespace Script.Managers {
                     case 1:
                         value += piece.IdPiece * 10;
                         value += piece.AvailableMove(board).Count * piece.ColorMultiplier;
-                        if (piece.canKillKing && piece.ColorMultiplier == -1) value -= 200; 
-                        if (piece.canKillKing && piece.ColorMultiplier == 1) value += 200; 
                         break;
                     case -1:
                         value -= piece.IdPiece * 10;
                         value -= piece.AvailableMove(board).Count * piece.ColorMultiplier;
-                        if (piece.canKillKing && piece.ColorMultiplier == -1) value += 200; 
-                        if (piece.canKillKing && piece.ColorMultiplier == 1) value -= 200; 
                         break;
                 }
             }
@@ -168,23 +165,17 @@ namespace Script.Managers {
         }
         
         private bool IsTerminal(Piece[,] board, int colorMultiplier) {
-            return IsInCheckMate(board, colorMultiplier);
-        }
-
-        private bool IsInCheckMate(Piece[,] board, int colorMultiplier) {
-            return IsInCheck(board, colorMultiplier) ;
+            return checkmate;
         }
 
         private bool IsInCheck(Piece[,] board, int colorMultiplier) {
-            bool isInCheck = false;
-            /*for (int i = 0; i < 8; i++) {
+            bool isInCheck = true;
+            for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-                    if (board != null) {
-                        if (board[i, j].GetType() == typeof(King) && (board[i, j].ColorMultiplier == colorMultiplier))
-                            isInCheck = false;
-                    }
+                    if (board[i,j] == null) continue;
+                    if (board[i, j].GetType() == typeof(King) && (board[i, j].ColorMultiplier == colorMultiplier)) isInCheck = false;
                 }
-            }*/
+            }
             return isInCheck;
         }
         

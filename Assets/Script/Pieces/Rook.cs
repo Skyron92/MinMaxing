@@ -8,13 +8,11 @@ namespace Script.Pieces {
 
         public override List<Vector2Int> AvailableMove(Piece[,] board) {
             var list = new List<Vector2Int>();
-            CanKillKingCounter = 0;
             Board = board;
             if (Coordinate.x < 0) return list;
             list.AddRange(YMoves);
             list.AddRange(RightMoves);
             list.AddRange(LeftMoves);
-            if (CanKillKingCounter == 0) canKillKing = false;
             return list;
         }
     }
