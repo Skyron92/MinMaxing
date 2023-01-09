@@ -143,6 +143,9 @@ namespace Script.Managers {
                     }
             }
             if (boards.Count == 0) checkmate = true;
+            else {
+                checkmate = false;
+            }
             return boards;
         }
 
