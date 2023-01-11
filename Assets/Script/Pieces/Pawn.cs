@@ -4,10 +4,7 @@ using UnityEngine;
 
 namespace Script.Pieces {
     public class Pawn : Piece {
-
-        private DataManager _dataManager => DataManager.Instance;
         private bool hasMoved;
-
         public Pawn(int colorMultiplier) : base(colorMultiplier) { }
 
         public override List<Vector2Int> AvailableMove(Piece[,] board) {
@@ -67,5 +64,6 @@ namespace Script.Pieces {
             }
             return list;
         }
+        
     }
 }

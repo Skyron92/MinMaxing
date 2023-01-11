@@ -13,6 +13,6 @@ namespace Script.Pieces {
             list.AddRange(DiagonalMove);
             return list;
         }
-    
+        
     }
 }

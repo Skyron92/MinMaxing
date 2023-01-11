@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Script.Managers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +7,6 @@ using UnityEngine.UI;
 namespace Script.Pieces {
     public abstract class Piece {
         public int ColorMultiplier;
-        protected int TypeOfPiece;
         public int IdPiece;
         protected Image sprite;
 

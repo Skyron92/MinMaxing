@@ -15,5 +15,6 @@ namespace Script.Pieces {
             list.AddRange(LeftMoves);
             return list;
         }
+        
     }
 }

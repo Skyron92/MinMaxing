@@ -5,11 +5,7 @@ using UnityEngine;
 
 namespace Script.Pieces
 {
-    public class Knight : Piece
-    {
-
-        private DataManager _dataManager => DataManager.Instance;
-
+    public class Knight : Piece {
         public Knight(int colorMultiplier) : base(colorMultiplier)
         {
         }
@@ -27,9 +23,9 @@ namespace Script.Pieces
                     if (pieceX1Y2.ColorMultiplier != ColorMultiplier) {
                         list.Add(X1Y2);
                     }
-                    else {
-                        list.Add(X1Y2);
-                    }
+                }
+                else {
+                    list.Add(X1Y2);
                 }
 
                 // X-1, Y2
@@ -133,5 +129,6 @@ namespace Script.Pieces
             }
             return list;
         }
+        
     }
 }

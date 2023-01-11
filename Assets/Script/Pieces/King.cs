@@ -4,8 +4,7 @@ using UnityEngine;
 
 namespace Script.Pieces {
     public class King : Piece {
-        private DataManager _dataManager => DataManager.Instance;
-        
+
         public King(int colorMultiplier) : base(colorMultiplier) { }
 
         public override List<Vector2Int> AvailableMove(Piece[,] board) {

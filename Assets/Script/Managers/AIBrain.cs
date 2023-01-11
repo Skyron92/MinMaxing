@@ -123,11 +123,11 @@ namespace Script.Managers {
                 if (piece == null) continue;
                 switch (PlayerColorMultiplier) {
                     case 1:
-                        value += piece.IdPiece * 10;
+                        value += piece.IdPiece * 10 + PositionValue(piece);
                         value += piece.AvailableMove(board).Count * piece.ColorMultiplier;
                         break;
                     case -1:
-                        value -= piece.IdPiece * 10;
+                        value -= piece.IdPiece * 10 + PositionValue(piece);
                         value -= piece.AvailableMove(board).Count * piece.ColorMultiplier;
                         break;
                 }
@@ -187,6 +187,27 @@ namespace Script.Managers {
                 if(a >= b) break;
             }
             return value;
+        }
+
+        public int PositionValue(Piece piece) {
+            Type type = piece.GetType();
+            if (piece.ColorMultiplier == 1) {
+                if (type == typeof(Pawn)) return Position.pawnPosition[piece.Coordinate.x, piece.Coordinate.y];
+                if (type == typeof(Rook)) return Position.rookPosition[piece.Coordinate.x, piece.Coordinate.y];
+                if (type == typeof(Knight)) return Position.knightPosition[piece.Coordinate.x, piece.Coordinate.y];
+                if (type == typeof(Fool)) return Position.bishopPosition[piece.Coordinate.x, piece.Coordinate.y];
+                if (type == typeof(Queen)) return Position.queenPosition[piece.Coordinate.x, piece.Coordinate.y];
+                if (type == typeof(King)) return Position.kingPosition[piece.Coordinate.x, piece.Coordinate.y]; 
+            }
+            if (piece.ColorMultiplier == -1) {
+                if (type == typeof(Pawn)) return Position.pawnPosition[7 - piece.Coordinate.x, 7 - piece.Coordinate.y];
+                if (type == typeof(Rook)) return Position.rookPosition[7 - piece.Coordinate.x, 7 - piece.Coordinate.y];
+                if (type == typeof(Knight)) return Position.knightPosition[7 - piece.Coordinate.x, 7 - piece.Coordinate.y];
+                if (type == typeof(Fool)) return Position.bishopPosition[7 - piece.Coordinate.x, 7 - piece.Coordinate.y];
+                if (type == typeof(Queen)) return Position.queenPosition[7 - piece.Coordinate.x, 7 - piece.Coordinate.y];
+                if (type == typeof(King)) return Position.kingPosition[7 - piece.Coordinate.x, 7 - piece.Coordinate.y]; 
+            }
+            return 1;
         }
 
         
