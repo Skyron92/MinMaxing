@@ -207,7 +207,7 @@ namespace Script.Managers {
                 if (type == typeof(Queen)) return Position.queenPosition[7 - piece.Coordinate.x, 7 - piece.Coordinate.y];
                 if (type == typeof(King)) return Position.kingPosition[7 - piece.Coordinate.x, 7 - piece.Coordinate.y]; 
             }
-            return 1;
+            return 0;
         }
 
         
