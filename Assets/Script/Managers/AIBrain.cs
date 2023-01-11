@@ -10,6 +10,7 @@ using Debug = UnityEngine.Debug;
 
 namespace Script.Managers {
     public class AIBrain : MonoBehaviour {
+        [SerializeField] private int _pieceMultiplier = 1;
         [SerializeField] public int PlayerColorMultiplier;
         [SerializeField] public AIBrain Opponent;
         public bool isYourTurn;
@@ -76,6 +77,7 @@ namespace Script.Managers {
                     oldValue = newValue;
                     NewBoard = child;
                 }
+                Debug.Log(newValue);
             }
         }
 
@@ -105,12 +107,13 @@ namespace Script.Managers {
             foreach (Piece piece in board) {
                 if (piece == null) continue;
                 if (piece.ColorMultiplier != colorMultiplier) continue;
-                    foreach (Vector2Int move in piece.AvailableMove(board)) {
+                foreach (Vector2Int move in piece.AvailableMove(board)) {
                     Piece[,] boardCopy = new Piece[8, 8];
                     Array.Copy(board, boardCopy, 64);
                     TheoricMove(boardCopy, piece, move);
-                    if (!IsInCheck(boardCopy, colorMultiplier)) boards.Add(boardCopy);
-                    }
+                    boards.Add(boardCopy);
+                    //if (!IsInCheck(boardCopy, colorMultiplier)) boards.Add(boardCopy);
+                }
             }
             if (boards.Count == 0) checkmate = true;
             else checkmate = false;
@@ -123,12 +126,10 @@ namespace Script.Managers {
                 if (piece == null) continue;
                 switch (PlayerColorMultiplier) {
                     case 1:
-                        value += piece.IdPiece * 10 + PositionValue(piece);
-                        value += piece.AvailableMove(board).Count * piece.ColorMultiplier;
+                        value += piece.IdPiece * _pieceMultiplier + PositionValue(piece);
                         break;
                     case -1:
-                        value -= piece.IdPiece * 10 + PositionValue(piece);
-                        value -= piece.AvailableMove(board).Count * piece.ColorMultiplier;
+                        value -= piece.IdPiece * _pieceMultiplier + PositionValue(piece);
                         break;
                 }
             }

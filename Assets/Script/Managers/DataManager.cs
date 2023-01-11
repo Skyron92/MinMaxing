@@ -61,10 +61,10 @@ namespace Script.Managers {
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null },
-                { null, null, null, null, null, null, new Rook(-1), new Rook(-1) },
-                { null, null, null, null, null, null, null, null },
+                { null, null, null, null, null, null, new Rook(-1), null },
+                { null, new Pawn(1), null, null, null, null, null, null },
                 { null, null, null, null, null, null, null, null }, 
-                {null, new Rook(-1), null, null, null, null, new King(1), null }
+                { null, new Rook(1), null, null, null, null, new Pawn(-1), null }
                 
             };
         }
